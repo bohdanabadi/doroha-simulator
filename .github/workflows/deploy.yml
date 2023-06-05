@@ -31,7 +31,7 @@ jobs:
           # Add your build and deployment commands here
           # Example: Assuming your project has a main.go file
           go build -o traffic-simulation
-          scp traffic-simulation username@165.22.233.166:${{ BACKEND_APP_DIRECTORY }}
+          scp traffic-simulation username@165.22.233.166:${{ secrets.BACKEND_APP_DIRECTORY }}
 
           # Add any other necessary commands to start/restart your application on the server
           sshpass -p ${{ secrets.SSH_PASSPHRASE }} ssh p ${{ secrets.USERNAME }}@165.22.233.166 "sudo systemctl restart myapp.service"
