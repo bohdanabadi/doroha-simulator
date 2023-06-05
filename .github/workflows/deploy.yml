@@ -10,7 +10,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-22.10
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout code
@@ -25,7 +25,6 @@ jobs:
         run: |
           sshpass -p ${{ secrets.SSH_PASSPHRASE }} ssh p ${{ secrets.USERNAME }}@165.22.233.166 "sudo apt update && sudo apt install -y golang"
 
-
       - name: Build and Deploy
         run: |
           # Add your build and deployment commands here
@@ -34,4 +33,4 @@ jobs:
           scp traffic-simulation username@165.22.233.166:${{ secrets.BACKEND_APP_DIRECTORY }}
 
           # Add any other necessary commands to start/restart your application on the server
-          sshpass -p ${{ secrets.SSH_PASSPHRASE }} ssh p ${{ secrets.USERNAME }}@165.22.233.166 "sudo systemctl restart myapp.service"
+          sshpass -p ${{ secrets.SSH_PASSPHRASE }} ssh p ${{ secrets.USERNAME }}@165.22.233.166 "sudo systemctl restart traffic-simulation.service"
