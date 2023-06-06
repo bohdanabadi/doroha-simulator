@@ -36,7 +36,7 @@ jobs:
       - name: Install SSH Agent
         run: |
           eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_rsa <<< "${{ secrets.SSH_PASSPHRASE }}"     
+          ssh-add ~/.ssh/id_rsa   
 
       - name: Install Go on Server
         run: |
