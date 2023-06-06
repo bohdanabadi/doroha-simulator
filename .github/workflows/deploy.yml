@@ -48,7 +48,7 @@ jobs:
           # Add your build and deployment commands here
           # Example: Assuming your project has a main.go file
           go build -o traffic-simulation
-          scp -i ~/.ssh/id_rsa traffic-simulation {{ secrets.USERNAME }}@165.22.233.166:${{ secrets.BACKEND_APP_DIRECTORY }}
+          scp -v -i ~/.ssh/id_rsa traffic-simulation {{ secrets.USERNAME }}@165.22.233.166:${{ secrets.BACKEND_APP_DIRECTORY }}
 
           # Deploy
           ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@165.22.233.166 "cd ${{ secrets.BACKEND_APP_DIRECTORY }} && chmod +x ./traffic-simulation && ./traffic-simulation"
