@@ -45,7 +45,7 @@ jobs:
           
       - name: Stop Service
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@example.com "pkill -f traffic-simulation"
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@165.22.233.166 "pkill -f traffic-simulation"
         continue-on-error: true  
 
       - name: Build and Deploy
