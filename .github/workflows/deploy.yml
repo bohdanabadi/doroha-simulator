@@ -56,5 +56,6 @@ jobs:
           # Copy the new binary
           scp -v -i ~/.ssh/id_rsa traffic-simulation ${{ secrets.USERNAME }}@165.22.233.166:${{ secrets.BACKEND_APP_DIRECTORY }}
           # Start the service on the remote server
-          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@165.22.233.166 "cd ${{ secrets.BACKEND_APP_DIRECTORY }} && nohup ./traffic-simulation > traffic-simulation.log 2>&1 & disown"
+          ssh -tt -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@165.22.233.166 "cd ${{ secrets.BACKEND_APP_DIRECTORY }} && nohup ./traffic-simulation > traffic-simulation.log 2>&1"
+
 
