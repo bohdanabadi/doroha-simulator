@@ -1,14 +1,14 @@
 package main
 
 import (
+	"github.com/bohdanabadi/Traffic-Simulation/internal/handler"
 	"github.com/gin-gonic/gin"
-	"github.com/yourusername/yourproject/internal/handlers"
 )
 
 func main() {
 	r := gin.Default()
 
-	r.GET("/", handlers.HelloWorld)
+	r.GET("/", handler.HelloWorld)
 
 	// Start server
 	r.Run(":8080")
