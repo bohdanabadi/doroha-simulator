@@ -23,14 +23,14 @@ jobs:
 
       - name: Install Go on Server
         run: |
-          sshpass -p ${{ secrets.SSH_PASSPHRASE }} ssh p ${{ secrets.USERNAME }}@165.22.233.166 "sudo apt update && sudo apt install -y golang"
+          sshpass ${{ secrets.SSH_PASSPHRASE }} ssh ${{ secrets.USERNAME }}@165.22.233.166 "sudo apt update && sudo apt install -y golang"
 
       - name: Build and Deploy
         run: |
           # Add your build and deployment commands here
           # Example: Assuming your project has a main.go file
           go build -o traffic-simulation
-          scp traffic-simulation username@165.22.233.166:${{ secrets.BACKEND_APP_DIRECTORY }}
+          scp traffic-simulation {{ secrets.USERNAME }}@165.22.233.166:${{ secrets.BACKEND_APP_DIRECTORY }}
 
           # Deploy
-          sshpass -p ${{ secrets.SSH_PASSPHRASE }} ssh p ${{ secrets.USERNAME }}@165.22.233.166 "cd ${{ secrets.BACKEND_APP_DIRECTORY }} && ./traffic-simulation"
+          sshpass ${{ secrets.SSH_PASSPHRASE }} ssh ${{ secrets.USERNAME }}@165.22.233.166 "cd ${{ secrets.BACKEND_APP_DIRECTORY }} && ./traffic-simulation"
