@@ -13,19 +13,6 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-
-      - name: Install sshpass
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y sshpass
-
-      - name: Setup SSH
-        run: |
-          mkdir -p ~/.ssh/
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan 165.22.233.166 >> ~/.ssh/known_hosts    
-
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -34,9 +21,21 @@ jobs:
         with:
           go-version: '1.20'
 
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan 165.22.233.166 >> ~/.ssh/known_hosts    
+
+      - name: Install SSH Agent
+        run: |
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa <<< "${{ secrets.SSH_PASSPHRASE }}"     
+
       - name: Install Go on Server
         run: |
-          sshpass ${{ secrets.SSH_PASSPHRASE }} ssh ${{ secrets.USERNAME }}@165.22.233.166 "sudo apt update && sudo apt install -y golang"
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@165.22.233.166 "sudo apt update && sudo apt install -y golang"
 
       - name: Build and Deploy
         run: |
@@ -46,4 +45,4 @@ jobs:
           scp traffic-simulation {{ secrets.USERNAME }}@165.22.233.166:${{ secrets.BACKEND_APP_DIRECTORY }}
 
           # Deploy
-          sshpass ${{ secrets.SSH_PASSPHRASE }} ssh ${{ secrets.USERNAME }}@165.22.233.166 "cd ${{ secrets.BACKEND_APP_DIRECTORY }} && ./traffic-simulation"
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@165.22.233.166 "cd ${{ secrets.BACKEND_APP_DIRECTORY }} && ./traffic-simulation"
