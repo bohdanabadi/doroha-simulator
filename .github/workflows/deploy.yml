@@ -38,13 +38,16 @@ jobs:
         run: ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@165.22.233.166 "sudo apt update && sudo apt install -y golang"
         env:
           GOROOT: /opt/digitalocean/go/1.20.4/x64
+          
+      - name: Stop Service
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@165.22.233.166 "pkill -f traffic-simulation"
+        continue-on-error: true  
 
       - name: Build and Deploy
         run: |
           # Add your build and deployment commands here
           go build -o traffic-simulation
-          # Stop the service on the remote server
-          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@165.22.233.166 "pkill traffic-simulation"
           # Copy the new binary
           scp -v -i ~/.ssh/id_rsa traffic-simulation ${{ secrets.USERNAME }}@165.22.233.166:${{ secrets.BACKEND_APP_DIRECTORY }}
           # Start the service on the remote server
