@@ -4,14 +4,10 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-22.04
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -46,7 +42,6 @@ jobs:
       - name: Build and Deploy
         run: |
           # Add your build and deployment commands here
-          # Example: Assuming your project has a main.go file
           go build -o traffic-simulation
           # Stop the service on the remote server
           ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@165.22.233.166 "pkill traffic-simulation"
