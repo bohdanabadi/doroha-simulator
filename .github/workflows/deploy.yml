@@ -36,14 +36,16 @@ jobs:
           
       - name: Stop Service
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@165.22.233.166 "pkill -f traffic-simulation"
+          ssh  ${{ secrets.USERNAME }}@165.22.233.166 "pkill -f traffic-simulation"
         continue-on-error: true  
 
       - name: Build and Deploy
         run: |
           # Add your build and deployment commands here
           go build -o traffic-simulation-api
+          # Make sure directory exists
+          ssh ${{ secrets.USERNAME }}@165.22.233.166 "mkdir -p #{{ APP_DIRECTORY}} }}"
           # Copy the new binary
-          scp -v -i ~/.ssh/id_rsa traffic-simulation ${{ secrets.USERNAME }}@165.22.233.166:${{ secrets.BACKEND_APP_DIRECTORY }}
+          scp -v -i ~/.ssh/id_rsa traffic-simulation-api ${{ secrets.USERNAME }}@165.22.233.166:${{ secrets.BACKEND_APP_DIRECTORY }}
           # Start the service on the remote server
-          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@165.22.233.166 "${{ secrets.BACKEND_APP_DIRECTORY }}/traffic-simulation-api > /dev/null 2>&1 &"
+          ssh ${{ secrets.USERNAME }}@165.22.233.166 "${{ secrets.APP_DIRECTORY }}/traffic-simulation-api > /dev/null 2>&1 &"
