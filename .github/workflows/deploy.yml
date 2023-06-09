@@ -44,7 +44,7 @@ jobs:
           # Add your build and deployment commands here
           go build -o traffic-simulation-api
           # Make sure directory exists
-          ssh ${{ secrets.USERNAME }}@165.22.233.166 "mkdir -p ${{ APP_DIRECTORY}} }}"
+          ssh ${{ secrets.USERNAME }}@165.22.233.166 "mkdir -p ${{secrets.APP_DIRECTORY}} }}"
           # Copy the new binary
           scp -v -i ~/.ssh/id_rsa traffic-simulation-api ${{ secrets.USERNAME }}@165.22.233.166:${{ secrets.BACKEND_APP_DIRECTORY }}
           # Start the service on the remote server
