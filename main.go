@@ -13,5 +13,5 @@ func main() {
 	})
 
 	// Start api
-	r.Run(":8081")
+	r.Run(":80")
 }
