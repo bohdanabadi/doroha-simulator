@@ -29,10 +29,12 @@ func NewServer(cfg Config) *Server {
 
 func (srv *Server) StartServer() error {
 	var err error
-
-	srv.engine.GET("/fe", func(context *gin.Context) {
-		context.JSON(http.StatusOK, gin.H{"message": "Hi!, Component data not found. Time to useState!"})
-	})
+	api := srv.engine.Group("/api")
+	{
+		api.GET("/fe", func(context *gin.Context) {
+			context.JSON(http.StatusOK, gin.H{"message": "Hi!, Component data not found. Time to useState!"})
+		})
+	}
 
 	// Here you could add a switch to start the server with TLS or without depending on the configuration
 	env := os.Getenv("ENV")
