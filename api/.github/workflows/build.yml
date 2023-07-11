@@ -4,7 +4,8 @@ on:
   pull_request:
     branches:
       - main
-
+    paths:
+      - 'api/**'
 jobs:
   build_and_test:
     runs-on: ubuntu-22.04
