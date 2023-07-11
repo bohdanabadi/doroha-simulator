@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 )
 
 type Server struct {
@@ -45,7 +46,16 @@ func (srv *Server) StartServer() error {
 	case "development":
 		err = srv.engine.Run(srv.config.ServerDev.Host + ":" + srv.config.ServerDev.Port)
 	case "production":
-		srv.engine.Static("/", "build/static")
+		// Catch-all route to serve React App
+		srv.engine.NoRoute(func(c *gin.Context) {
+			// check if the request path starts with /api, if so, return a 404
+			if strings.HasPrefix(c.Request.URL.Path, "/api") {
+				c.JSON(http.StatusNotFound, gin.H{"message": "Not found"})
+				return
+			}
+			// otherwise, serve the index.html file
+			c.File("./build/index.html")
+		})
 		err = srv.engine.RunTLS(srv.config.ServerProd.Host+":"+srv.config.ServerProd.Port, srv.config.CertFile, srv.config.KeyFile)
 	default:
 		log.Fatalf("Invalid environment: %s", env)
