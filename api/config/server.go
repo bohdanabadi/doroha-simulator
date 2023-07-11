@@ -54,7 +54,7 @@ func (srv *Server) StartServer() error {
 				return
 			}
 			// otherwise, serve the index.html file
-			c.File("./build/index.html")
+			c.File("build/index.html")
 		})
 		err = srv.engine.RunTLS(srv.config.ServerProd.Host+":"+srv.config.ServerProd.Port, srv.config.CertFile, srv.config.KeyFile)
 	default:
