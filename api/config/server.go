@@ -47,6 +47,7 @@ func (srv *Server) StartServer() error {
 	case "development":
 		err = srv.engine.Run(srv.config.ServerDev.Host + ":" + srv.config.ServerDev.Port)
 	case "production":
+		srv.engine.Static("/static", "./build/static")
 		err = srv.engine.RunTLS(srv.config.ServerProd.Host+":"+srv.config.ServerProd.Port, srv.config.CertFile, srv.config.KeyFile)
 	default:
 		log.Fatalf("Invalid environment: %s", env)

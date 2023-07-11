@@ -1,8 +1,12 @@
 name: Deploy to Server
+
 on:
   push:
     branches:
       - main
+    paths:
+      - 'api/**'
+
 jobs:
   deploy:
     runs-on: ubuntu-22.04
@@ -31,11 +35,11 @@ jobs:
         run: |
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_rsa   
-          
+
       - name: Stop Service
         run: |
           ssh  ${{ secrets.USERNAME }}@165.22.233.166 "pkill -f traffic-simulation"
-        continue-on-error: true  
+        continue-on-error: true
 
       - name: Build and Deploy
         run: |
