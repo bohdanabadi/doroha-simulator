@@ -20,6 +20,6 @@ jobs:
 
       - name: Build and Test
         run: |
-          go build -o /api/traffic-simulation
+          go build -o ./traffic-simulation
           ##go test ./...  # placeholder to be modified later
         working-directory: ./api
