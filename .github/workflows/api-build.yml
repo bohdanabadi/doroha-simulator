@@ -1,4 +1,4 @@
-name: Build and Test
+name: API Build and Test
 
 on:
   pull_request:
@@ -20,5 +20,6 @@ jobs:
 
       - name: Build and Test
         run: |
-          go build -o traffic-simulation
+          go build -o /api/traffic-simulation
           ##go test ./...  # placeholder to be modified later
+        working-directory: ./api
