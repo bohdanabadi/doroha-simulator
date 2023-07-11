@@ -30,10 +30,6 @@ func NewServer(cfg Config) *Server {
 func (srv *Server) StartServer() error {
 	var err error
 
-	srv.engine.GET("/", func(context *gin.Context) {
-		context.String(http.StatusOK, "Hi!, Keep your Gin up")
-	})
-
 	srv.engine.GET("/fe", func(context *gin.Context) {
 		context.JSON(http.StatusOK, gin.H{"message": "Hi!, Component data not found. Time to useState!"})
 	})
@@ -47,7 +43,7 @@ func (srv *Server) StartServer() error {
 	case "development":
 		err = srv.engine.Run(srv.config.ServerDev.Host + ":" + srv.config.ServerDev.Port)
 	case "production":
-		srv.engine.Static("/static", "./build/static")
+		srv.engine.Static("/", "./build/static")
 		err = srv.engine.RunTLS(srv.config.ServerProd.Host+":"+srv.config.ServerProd.Port, srv.config.CertFile, srv.config.KeyFile)
 	default:
 		log.Fatalf("Invalid environment: %s", env)
