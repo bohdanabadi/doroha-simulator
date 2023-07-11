@@ -46,6 +46,7 @@ func (srv *Server) StartServer() error {
 	case "development":
 		err = srv.engine.Run(srv.config.ServerDev.Host + ":" + srv.config.ServerDev.Port)
 	case "production":
+		srv.engine.Static("/static", "./build/static")
 		// Catch-all route to serve React App
 		srv.engine.NoRoute(func(c *gin.Context) {
 			// check if the request path starts with /api, if so, return a 404
@@ -54,7 +55,7 @@ func (srv *Server) StartServer() error {
 				return
 			}
 			// otherwise, serve the index.html file
-			c.File("build/index.html")
+			c.File("./build/index.html")
 		})
 		err = srv.engine.RunTLS(srv.config.ServerProd.Host+":"+srv.config.ServerProd.Port, srv.config.CertFile, srv.config.KeyFile)
 	default:
