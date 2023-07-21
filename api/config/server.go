@@ -20,7 +20,7 @@ func NewServer(cfg Config) *Server {
 	}
 
 	corsConfig := cors.DefaultConfig()
-	corsConfig.AllowOrigins = []string{"http://localhost:3000"}
+	corsConfig.AllowOrigins = []string{"https://traffic.bohdanabadi.com"}
 	corsConfig.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"}
 	corsConfig.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type"}
 	srv.engine.Use(cors.New(corsConfig))
@@ -29,10 +29,6 @@ func NewServer(cfg Config) *Server {
 
 func (srv *Server) StartServer() error {
 	var err error
-
-	srv.engine.GET("/", func(context *gin.Context) {
-		context.String(http.StatusOK, "Hi!, Keep your Gin up")
-	})
 
 	srv.engine.GET("/fe", func(context *gin.Context) {
 		context.JSON(http.StatusOK, gin.H{"message": "Hi!, Component data not found. Time to useState!"})
@@ -47,7 +43,7 @@ func (srv *Server) StartServer() error {
 	case "development":
 		err = srv.engine.Run(srv.config.ServerDev.Host + ":" + srv.config.ServerDev.Port)
 	case "production":
-		err = srv.engine.RunTLS(srv.config.ServerProd.Host+":"+srv.config.ServerProd.Port, srv.config.CertFile, srv.config.KeyFile)
+		err = srv.engine.Run(srv.config.ServerProd.Host + ":" + srv.config.ServerProd.Port)
 	default:
 		log.Fatalf("Invalid environment: %s", env)
 	}
