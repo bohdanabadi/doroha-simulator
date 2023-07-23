@@ -29,7 +29,6 @@ func NewServer(cfg Config) *Server {
 
 func (srv *Server) StartServer() error {
 	var err error
-
 	srv.engine.GET("/fe", func(context *gin.Context) {
 		context.JSON(http.StatusOK, gin.H{"message": "Hi!, Component data not found. Time to useState!"})
 	})
