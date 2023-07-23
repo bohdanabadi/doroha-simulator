@@ -20,7 +20,7 @@ func NewServer(cfg Config) *Server {
 	}
 
 	corsConfig := cors.DefaultConfig()
-	corsConfig.AllowOrigins = []string{"https://traffic.bohdanabadi.com"}
+	corsConfig.AllowOrigins = []string{"https://www.traffic.bohdanabadi.com"}
 	corsConfig.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"}
 	corsConfig.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type"}
 	srv.engine.Use(cors.New(corsConfig))
