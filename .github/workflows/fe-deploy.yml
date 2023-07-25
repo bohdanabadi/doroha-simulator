@@ -1,4 +1,4 @@
-name: Build and Test
+name: FE Deploy to Server
 
 on:
   push:
