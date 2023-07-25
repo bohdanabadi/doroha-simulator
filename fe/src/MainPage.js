@@ -17,7 +17,7 @@ function MainPage() {
     } else {
         return (
             <div>
-                <h1>Data from the Backend:</h1>
+                <h1>Data from the Backend & Testing Github Actions:</h1>
                 <pre>{data}</pre>
             </div>
         );
