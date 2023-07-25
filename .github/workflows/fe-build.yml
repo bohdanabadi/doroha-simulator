@@ -21,6 +21,7 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: ./fe
 
       - name: Build and Test
         run: npm run build
