@@ -43,5 +43,6 @@ jobs:
       - name: Build and Deploy
         run: |
           npm run build
+          ssh ${{ secrets.USERNAME }}@165.22.233.166 "rm -rf ${{ secrets.FE_APP_DIRECTORY }}/build"
           scp -r build/ ${{ secrets.USERNAME }}@165.22.233.166:${{ secrets.FE_APP_DIRECTORY }}
         working-directory: ./fe
