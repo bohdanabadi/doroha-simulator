@@ -6,10 +6,9 @@ function MainPage() {
     //make http GET call to localhost:8080/fe
 
     useEffect(() => {
-        fetch("http://localhost:8080/fe")
+        fetch(process.env.REACT_APP_FE_URL+"/fe")
             .then((res) => res.json())
             .then((data) => setData(data.message))
-            .then((data) => console.log("Hello there" +  data));
     },[]);
 
     if (data === null) {
