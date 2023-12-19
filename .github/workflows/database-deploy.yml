@@ -39,4 +39,4 @@ jobs:
             docker load < /var/www/databases/doroha-postgis.tar
             docker stop doroha-postgis || true
             docker doroha-postgis || true
-            docker run -d --name doroha-postgis -p 5432:5432 -e POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+            docker run -d -p 5432:5432 -e POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} doroha-postgis
