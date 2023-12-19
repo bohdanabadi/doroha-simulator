@@ -34,7 +34,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            mkdir -p /www/var/databases
+            mkdir -p /var/www/databases
             mv ~/doroha-postgis.tar /var/www/databases
             docker load < /var/www/databases/doroha-postgis.tar
             docker stop doroha-postgis || true
