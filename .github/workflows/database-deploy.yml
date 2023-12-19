@@ -22,7 +22,7 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key
           chmod 600 ssh_key
           # Use the temporary file for SCP
-          scp -o StrictHostKeyChecking=no -i ssh_key doroha-postgis.tar ${{ secrets.USERNAME }}@$165.22.233.166:~/
+          scp -o StrictHostKeyChecking=no -i ssh_key doroha-postgis.tar ${{ secrets.USERNAME }}@165.22.233.166:~/
           # Clean up the temporary key file
           rm ssh_key
 
