@@ -1,0 +1,35 @@
+name: Deploy Database
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: |
+          cd database
+          docker build -t doroha-postgis .
+          docker save doroha-postgis > doroha-postgis.tar
+
+      - name: Transfer Docker image to server
+        run: |
+          scp -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} doroha-postgis.tar ${{ secrets.USERNAME }}@$165.22.233.166:~/    
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: 165.22.233.166
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            mkdir -p /www/var/databases
+            mv ~/doroha-postgis.tar /www/var/databases
+            docker load < /www/var/databases/doroha-postgis.tar
+            docker stop doroha-postgis || true
+            docker doroha-postgis || true
+            docker run -d --name doroha-postgis -p 5432:5432 -e POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} doroha-postgis
