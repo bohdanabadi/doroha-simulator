@@ -36,7 +36,7 @@ jobs:
           script: |
             mkdir -p /var/www/databases
             mv ~/doroha-postgis.tar /var/www/databases
-            docker load < /var/www/databases/doroha-postgis.tar
-            docker stop doroha-postgis || true
-            docker doroha-postgis || true
+            sudo docker load < /var/www/databases/doroha-postgis.tar
+            sudo docker stop doroha-postgis || true
+            docker rm doroha-postgis || true
             docker run -d -p 5432:5432 -e POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} doroha-postgis
