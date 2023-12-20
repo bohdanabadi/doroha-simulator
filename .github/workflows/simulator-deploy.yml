@@ -1,0 +1,58 @@
+name: Simulator Deploy to Server
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'simulator/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.20'
+
+      - name: Upgrade SSH
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openssh-client
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan 165.22.233.166 >> ~/.ssh/known_hosts    
+
+      - name: Install SSH Agent
+        run: |
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa   
+
+      - name: Stop Service
+        run: |
+          ssh  ${{ secrets.USERNAME }}@165.22.233.166 "pkill -f traffic-simulation"
+        continue-on-error: true
+
+      - name: Build and Deploy
+        run: |
+          # Add your build and deployment commands here
+          go build -o traffic-simulator
+          # Make sure directory exists
+          ssh ${{ secrets.USERNAME }}@165.22.233.166 "mkdir -p ${{secrets.APP_DIRECTORY}} }}"
+          # Copy the new binary
+          scp -v -i ~/.ssh/id_rsa traffic-simulator ${{ secrets.USERNAME }}@165.22.233.166:${{ secrets.APP_DIRECTORY }}
+          # Enable binding our app to lower ports
+          ssh ${{ secrets.USERNAME }}@165.22.233.166 "sudo setcap 'cap_net_bind_service=+ep' ${{ secrets.APP_DIRECTORY }}/traffic-simulator"
+          # Copy the configuration file
+          scp -v -i ~/.ssh/id_rsa config.yml ${{ secrets.USERNAME }}@165.22.233.166:${{ secrets.APP_DIRECTORY }}
+          # Start the service on the remote server
+          ssh ${{ secrets.USERNAME }}@165.22.233.166 "cd ${{ secrets.APP_DIRECTORY }}; ENV=production ./traffic-simulator > /dev/null 2>&1 &"
+        working-directory: ./simulator
