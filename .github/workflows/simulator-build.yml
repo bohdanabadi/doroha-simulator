@@ -1,4 +1,4 @@
-name: API Build and Test
+name: Simulator Build and Test
 
 on:
   pull_request:
