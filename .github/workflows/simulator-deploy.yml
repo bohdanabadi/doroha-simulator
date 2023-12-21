@@ -49,8 +49,6 @@ jobs:
           ssh ${{ secrets.USERNAME }}@165.22.233.166 "mkdir -p ${{secrets.APP_DIRECTORY}} }}"
           # Copy the new binary
           scp -v -i ~/.ssh/id_rsa traffic-simulator ${{ secrets.USERNAME }}@165.22.233.166:${{ secrets.APP_DIRECTORY }}
-          # Enable binding our app to lower ports
-          ssh ${{ secrets.USERNAME }}@165.22.233.166 "sudo setcap 'cap_net_bind_service=+ep' ${{ secrets.APP_DIRECTORY }}/traffic-simulator"
           # Copy the configuration file
           scp -v -i ~/.ssh/id_rsa config.yml ${{ secrets.USERNAME }}@165.22.233.166:${{ secrets.APP_DIRECTORY }}
           # Start the service on the remote server
