@@ -1,4 +1,4 @@
-package config
+package server
 
 import (
 	"gopkg.in/yaml.v3"
@@ -15,21 +15,18 @@ type Config struct {
 		Port string `yaml:"port"`
 		Host string `yaml:"host"`
 	} `yaml:"serverProd"`
-	CertFile string `yaml:"certfile"`
-	KeyFile  string `yaml:"keyfile"`
 }
 
 func LoadConfig() Config {
 	var config Config
-
 	data, err := os.ReadFile("config.yml")
 	if err != nil {
-		log.Fatalf("error: %v", err)
+		log.Fatalf("apperror: %v", err)
 	}
 
 	err = yaml.Unmarshal(data, &config)
 	if err != nil {
-		log.Fatalf("error: %v", err)
+		log.Fatalf("apperror: %v", err)
 	}
 
 	return config
