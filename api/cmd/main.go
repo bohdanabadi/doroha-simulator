@@ -14,4 +14,5 @@ func main() {
 	cfg := server.LoadConfig()
 	newServer := server.NewServer(cfg)
 	log.Fatal(newServer.StartServer())
+
 }
