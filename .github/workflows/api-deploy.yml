@@ -55,5 +55,7 @@ jobs:
           # Copy the configuration file
           scp -v -i ~/.ssh/id_rsa config.yml ${{ secrets.USERNAME }}@165.22.233.166:${{ secrets.APP_DIRECTORY }}
           # Start the service on the remote server
-          ssh ${{ secrets.USERNAME }}@165.22.233.166 "cd ${{ secrets.APP_DIRECTORY }}; ENV=production ./traffic-simulation-api > /dev/null 2>&1 &"
+          ssh ${{ secrets.USERNAME }}@165.22.233.166 "cd ${{ secrets.APP_DIRECTORY }};
+          ENV=production DB_NAME=traffic_db DB_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} DB_PORT=5432 DB_USER=trafficUser21
+          ./traffic-simulation-api > /dev/null 2>&1 &"
         working-directory: ./api/cmd
