@@ -18,6 +18,9 @@ jobs:
         with:
           go-version: '1.20'
 
+      - name: Install openapi-generator-cli
+        run: npm install @openapitools/openapi-generator-cli -g
+
       - name: Build and Test
         run: |
           go generate
