@@ -46,7 +46,7 @@ jobs:
 
       - name: Build and Deploy
         run: |
-        # Navigate to the directory containing the Go code
+          # Navigate to the directory containing the Go code
           cd cmd
           # Build
           go generate
