@@ -44,6 +44,7 @@ jobs:
       - name: Build and Deploy
         run: |
           # Add your build and deployment commands here
+          go generate
           go build -o traffic-simulation-api
           # Make sure directory exists
           ssh ${{ secrets.USERNAME }}@165.22.233.166 "mkdir -p ${{secrets.APP_DIRECTORY}} }}"

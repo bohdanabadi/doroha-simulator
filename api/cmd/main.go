@@ -4,12 +4,10 @@ import (
 	"github.com/bohdanabadi/Traffic-Simulation/api/api/server"
 	"github.com/bohdanabadi/Traffic-Simulation/api/broadcast"
 	"github.com/bohdanabadi/Traffic-Simulation/api/db"
-	"github.com/gorilla/websocket"
 	"log"
 )
 
-var conn *websocket.Conn
-
+//go:generate openapi-generator-cli generate -i ../api/api.yml -g go-gin-server -o ../api/generated --global-property models
 func main() {
 	db.ConnectDatabase()
 	go broadcast.H.Run()
