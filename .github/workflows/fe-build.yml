@@ -23,6 +23,9 @@ jobs:
         run: npm install
         working-directory: ./fe
 
+      - name: List files in fe directory
+        run: ls -alR ./fe
+
       - name: Build and Test
         run: npm run build
         #npm run test
