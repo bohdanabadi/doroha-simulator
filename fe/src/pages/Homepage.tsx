@@ -1,11 +1,11 @@
 import {useEffect, useMemo, useState} from "react";
-import ActiveJourneyListComponent from "../components/ActiveJourneyListComponent";
+import ActiveJourneyList from "../components/ActiveJourneyListComponent";
 import {Journey} from "../types/Journey";
 import MapComponent from "../components/MapComponent";
 import "../assets/css/HomePage.css"
 import {JourneyListContext} from "../util/JourneyListContext";
 import {calculateBearing} from "../util/CarIconBearingCalculator";
-import {WebSocketClient} from "../util/WebSocketClient";
+import WebSocketClient from "../util/WebSocketClient";
 
 
 function Homepage () {
@@ -57,7 +57,7 @@ function Homepage () {
                     <MapComponent/>
                 </div>
                 <div className="journey-list">
-                    <ActiveJourneyListComponent/>
+                    <ActiveJourneyList/>
                 </div>
             </JourneyListContext.Provider>
         </div>
