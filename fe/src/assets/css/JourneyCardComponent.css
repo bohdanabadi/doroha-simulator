@@ -1,0 +1,17 @@
+/* JourneyCard.css */
+.journey-card {
+    border: 2px solid grey;
+    background-color: grey; /* This represents grey[200] */
+    margin: 3px;
+}
+
+.journey-title {
+    text-align: center;
+    color: grey;
+}
+
+.journey-distance {
+    margin-bottom: 1.5em;
+    font-size: 14px;
+    color: grey;
+}
