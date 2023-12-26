@@ -1,4 +1,4 @@
-class WebSocketClient {
+export class WebSocketClient {
     private url: string;
     private maxRetries: number;
     private retryCount: number;
@@ -61,5 +61,3 @@ class WebSocketClient {
         this.socket?.close();
     }
 }
-
-export default WebSocketClient;
