@@ -5,7 +5,7 @@ CREATE SCHEMA IF NOT EXISTS traffic_db;
 -- -- Set the search path to include your schema and public
 -- SET search_path TO traffic_db, public;
 
-CREATE TABLE IF NOT EXISTS traffic_db.journeys (
+CREATE TABLE IF NOT EXISTS journeys (
                                         id SERIAL PRIMARY KEY,
                                         starting_point_x FLOAT NOT NULL,
                                         starting_point_y FLOAT NOT NULL,
@@ -16,6 +16,6 @@ CREATE TABLE IF NOT EXISTS traffic_db.journeys (
                                         status VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS traffic_db.road_map_points (
+CREATE TABLE IF NOT EXISTS road_map_points (
                                                point GEOMETRY NOT NULL
 );
