@@ -42,9 +42,10 @@ jobs:
             # Stop and remove the existing container if it exists
             docker stop doroha-postgis || true
             docker rm doroha-postgis || true
-            # Remove the old image
-            docker rmi doroha-postgis:latest || true
-            # Load the new Docker image
+            # Force remove the old image, even if it's being used
+            docker rmi -f doroha-postgis:latest || true
             docker load < /var/www/databases/doroha-postgis.tar
+            # Ensure no other containers are using port 5432
+            docker ps -q --filter "publish=5432" | xargs -r docker stop
             # Run the new container
             docker run -d -p 5432:5432 -e POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} doroha-postgis
