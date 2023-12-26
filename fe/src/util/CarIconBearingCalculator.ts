@@ -6,9 +6,7 @@ export function calculateBearing(startLat: number, startLng: number, destLat: nu
 
     const y = Math.sin(destLngRad - startLngRad) * Math.cos(destLatRad);
     const x = Math.cos(startLatRad) * Math.sin(destLatRad) - Math.sin(startLatRad) * Math.cos(destLatRad) * Math.cos(destLngRad - startLngRad);
-    const bearing = (radiansToDegrees(Math.atan2(y, x)) + 360) % 360;
-
-    return bearing;
+    return (radiansToDegrees(Math.atan2(y, x)) + 360) % 360;
 }
 
 function degreesToRadians(degrees: number): number {
