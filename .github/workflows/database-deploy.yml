@@ -39,11 +39,11 @@ jobs:
             rm -f /var/www/databases/doroha-postgis.tar || true
             # Move the new Docker image tar file
             mv ~/doroha-postgis.tar /var/www/databases
-            # Remove the old image
-            docker rmi doroha-postgis:latest || true
             # Stop and remove the existing container if it exists
             docker stop doroha-postgis || true
             docker rm doroha-postgis || true
+            # Remove the old image
+            docker rmi doroha-postgis:latest || true
             # Load the new Docker image
             docker load < /var/www/databases/doroha-postgis.tar
             # Run the new container
