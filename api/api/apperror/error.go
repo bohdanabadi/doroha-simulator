@@ -12,4 +12,5 @@ func (e *AppError) Error() string {
 
 func NewAppError(code int, description string, err error) *AppError {
 	return &AppError{Code: code, Description: description, Err: err}
+
 }
