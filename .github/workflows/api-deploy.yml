@@ -38,7 +38,7 @@ jobs:
 
       - name: Stop Service
         run: |
-          ssh  ${{ secrets.USERNAME }}@165.22.233.166 "pkill -f traffic-simulation"
+          ssh  ${{ secrets.USERNAME }}@165.22.233.166 "pkill -f traffic-simulation-api"
         continue-on-error: true
 
       - name: Install openapi-generator-cli
