@@ -2,7 +2,7 @@
     text-align: center;
     font-size: 16px;
     color: #666; /* Adjust color as per your theme */
-    padding: 20px;
-    margin-top: 2px; /* Space from top */
+    padding: 1vh;
+    margin-top: .2vh; /* Space from top */
     font-weight: bold;
 }

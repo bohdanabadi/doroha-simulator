@@ -11,14 +11,14 @@
 .map-container {
     flex: 0; /* Adjust the flex ratio */
     position: relative;
-    height: 91vh; /* Fixed height */
+    height: 95vh; /* Fixed height */
 }
 
 .sidebar {
     flex: 1;
-    width: 17vh; /* Adjust the width as needed */
-    height: 91vh; /* Full viewport height */
+    width: 20vh; /* Adjust the width as needed */
+    height: 95vh; /* Full viewport height */
     overflow-y: auto; /* Enables vertical scrolling */
-    border: 2px solid #ddd; /* Optional */
+    border: .2vh solid #ddd; /* Optional */
     border-radius: 3px; /* Optional */
 }
