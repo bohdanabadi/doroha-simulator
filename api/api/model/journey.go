@@ -3,6 +3,7 @@ package model
 import (
 	"database/sql/driver"
 	"fmt"
+	"github.com/bohdanabadi/Traffic-Simulation/api/api/apperror"
 	openapi "github.com/bohdanabadi/Traffic-Simulation/api/api/generated/go"
 )
 
@@ -47,17 +48,16 @@ func (js *JourneyStatus) Scan(value interface{}) error {
 }
 
 func MapToGormModel(journey openapi.Journey) (Journey, error) {
-	//var status JourneyStatus
-	//switch journey.Status {
-	//case "IN QUEUE":
-	//	status = InQueue
-	//case "IN PROGRESS":
-	//	status = InProgress
-	//case "FINISHED":
-	//	status = Finished
-	//default:
-	//	return Journey{}, apperror.NewAppError(400, "Invalid journey status", nil)
-	//}
+	switch journey.Status {
+	case string(InQueue):
+		break
+	case string(InProgress):
+		break
+	case string(Finished):
+		break
+	default:
+		return Journey{}, apperror.NewAppError(400, "Invalid journey status", nil)
+	}
 
 	return Journey{
 		StartingPointX: journey.StartingPoint.X,
@@ -72,7 +72,6 @@ func MapToGormModel(journey openapi.Journey) (Journey, error) {
 }
 
 func MapToJourneyDTO(journey Journey) (openapi.Journey, error) {
-
 	return openapi.Journey{
 		Id:            int32(journey.ID),
 		StartingPoint: openapi.Point{X: journey.StartingPointX, Y: journey.StartingPointY},
