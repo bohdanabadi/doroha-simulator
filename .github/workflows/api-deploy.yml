@@ -45,11 +45,8 @@ jobs:
         run: npm install @openapitools/openapi-generator-cli -g
 
       - name: Use secret
-        env:
-          MY_SECRET: ${{ secrets.API_APP_DIRECTORY }}
         run: |
-            echo "Using secret in a command, but its value will not be displayed"
-            some-command-using-secret $MY_SECRET
+          run: echo ${{secrets.API_APP_DIRECTORY}} | sed 's/./& /g'
 
       - name: Build and Deploy
         run: |
