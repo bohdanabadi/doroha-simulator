@@ -18,6 +18,7 @@ func HandleSimulationConnection(c *gin.Context) {
 
 	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
+
 		log.Println("Failed to upgrade to websocket:", err)
 		return
 	}
