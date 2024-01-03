@@ -1,8 +1,8 @@
 /* JourneyCard.css */
 .journey-card {
-    border: 2px solid grey;
+    border: .2vh solid grey;
     background-color: grey; /* This represents grey[200] */
-    margin: 3px;
+    margin: .25vh;
 }
 
 .journey-title {
