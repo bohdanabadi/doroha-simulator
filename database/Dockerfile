@@ -6,4 +6,7 @@ COPY ./road_map_points.sql /docker-entrypoint-initdb.d/
 
 # Optional: Set environment variables
 ENV POSTGRES_USER=trafficUser21
-ENV POSTGRES_DB: traffic_db
+ENV POSTGRES_DB=traffic_db
+
+
+# Password is Morelanaj
