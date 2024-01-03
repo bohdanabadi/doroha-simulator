@@ -47,7 +47,6 @@ func (srv *Server) StartServer() error {
 	env := os.Getenv("ENV")
 	if env == "dev" || env == "" {
 		env = "development"
-
 	}
 	switch env {
 	case "development":
