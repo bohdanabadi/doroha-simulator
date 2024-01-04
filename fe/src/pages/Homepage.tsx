@@ -13,7 +13,7 @@ function Homepage () {
     const [journeys, setJourneys] = useState<Map<number, Journey>>(new Map());
 
     useEffect(() => {
-        const url = 'ws://localhost:8081/v1/ws/fe/path';
+        const url:string  = process.env.API_WEBSOCKET_ENDPOINT ?? "undefined_string_value";
         const webSocketClient = new WebSocketClient(url, 5);
         const handleMessage = (message: string) => {
             const journeyData: Journey = JSON.parse(message);
