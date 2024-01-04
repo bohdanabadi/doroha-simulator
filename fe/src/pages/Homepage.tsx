@@ -13,10 +13,13 @@ function Homepage () {
     const [journeys, setJourneys] = useState<Map<number, Journey>>(new Map());
 
     useEffect(() => {
-        const url:string  = process.env.API_WEBSOCKET_ENDPOINT ?? "undefined_string_value";
-        const webSocketClient = new WebSocketClient(url, 5);
-        const handleMessage = (message: string) => {
-            const journeyData: Journey = JSON.parse(message);
+        const websocketEndpoint:string | undefined   = process.env.REACT_APP_API_WEBSOCKET;
+        if (typeof websocketEndpoint === 'string' && websocketEndpoint.trim() !== '') {
+            console.log("inside");
+            // Valid endpoint, proceed with the connection
+            const webSocketClient = new WebSocketClient(websocketEndpoint, 5);
+            const handleMessage = (message: string) => {
+                const journeyData: Journey = JSON.parse(message);
                 setJourneys((prevCarPosition) => {
                     const updatedCarPositions = new Map(prevCarPosition)
                     const bearing = calculateBearing(journeyData.prevPoint.Y, journeyData.prevPoint.X, journeyData.currentPoint.Y, journeyData.currentPoint.X)
@@ -24,14 +27,19 @@ function Homepage () {
                     updatedCarPositions.set(journeyData.id, journeyData)
                     return updatedCarPositions;
                 })
-        };
+            };
 
-        webSocketClient.addListener(handleMessage);
-        webSocketClient.connect();
+            webSocketClient.addListener(handleMessage);
+            webSocketClient.connect();
 
-        return () => {
-            webSocketClient.removeListener(handleMessage);
-            webSocketClient.close();
+            return () => {
+                webSocketClient.removeListener(handleMessage);
+                webSocketClient.close();
+            }
+        } else {
+            console.log(websocketEndpoint);
+            // Invalid or missing endpoint, handle the error
+            console.error("WebSocket endpoint is undefined, null, or empty. Cannot establish WebSocket connection.");
         }
     }, []);
 
