@@ -8,12 +8,14 @@ import (
 
 type Config struct {
 	ServerDev struct {
-		Port string `yaml:"port"`
-		Host string `yaml:"host"`
+		Port        string `yaml:"port"`
+		Host        string `yaml:"host"`
+		CrossOrigin string `yaml:"cross-origin"`
 	} `yaml:"serverDev"`
 	ServerProd struct {
-		Port string `yaml:"port"`
-		Host string `yaml:"host"`
+		Port        string `yaml:"port"`
+		Host        string `yaml:"host"`
+		CrossOrigin string `yaml:"cross-origin"`
 	} `yaml:"serverProd"`
 }
 

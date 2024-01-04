@@ -9,19 +9,35 @@ import (
 	"os"
 )
 
+var env string
+
 type Server struct {
 	engine *gin.Engine
 	config Config
 }
 
 func NewServer(cfg Config) *Server {
+	// Here you could add a switch to start the server with TLS or without depending on the configuration
+	env = os.Getenv("ENV")
+	if env == "dev" || env == "" {
+		env = "development"
+
+	}
+
 	srv := &Server{
 		engine: gin.Default(),
 		config: cfg,
 	}
 
 	corsConfig := cors.DefaultConfig()
-	corsConfig.AllowOrigins = []string{"http://localhost:3000"}
+	switch env {
+	case "development":
+		corsConfig.AllowOrigins = []string{cfg.ServerDev.CrossOrigin}
+	case "production":
+		corsConfig.AllowOrigins = []string{cfg.ServerProd.CrossOrigin}
+	default:
+		log.Fatalf("Invalid environment: %s", env)
+	}
 	corsConfig.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"}
 	corsConfig.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type"}
 	srv.engine.Use(cors.New(corsConfig))
@@ -43,12 +59,6 @@ func (srv *Server) StartServer() error {
 		v1.GET("ws/fe/path", handler.HandleFrontendConnection)
 	}
 
-	// Here you could add a switch to start the server with TLS or without depending on the configuration
-	env := os.Getenv("ENV")
-	if env == "dev" || env == "" {
-		env = "development"
-
-	}
 	switch env {
 	case "development":
 		err = srv.engine.Run(srv.config.ServerDev.Host + ":" + srv.config.ServerDev.Port)
