@@ -1,6 +1,8 @@
 serverDev:
   host: "localhost"
   port: "8080"
+  cross-origin: "http://localhost:3000"
 serverProd:
   host: "localhost"
   port: "8081"
+  cross-origin: "traffic.bohdanabadi.com"
