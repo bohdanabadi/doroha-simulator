@@ -37,6 +37,7 @@ func NewServer(cfg Config) *Server {
 		corsConfig.AllowOrigins = []string{cfg.ServerProd.CrossOrigin}
 	default:
 		log.Fatalf("Invalid environment: %s", env)
+
 	}
 	corsConfig.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"}
 	corsConfig.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type"}
