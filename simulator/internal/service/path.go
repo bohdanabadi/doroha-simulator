@@ -22,6 +22,7 @@ func AStar(journey *dto.Journey) (*orderedmap.OrderedMap[string, dto.PointNode],
 			sumOfAllCosts[key] = math.Inf(1) // fScore
 		}
 	}
+
 	costFromStart[*start] = 0
 	sumOfAllCosts[*start] = start.Heuristic(*end)
 
