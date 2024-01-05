@@ -28,7 +28,6 @@ func NewServer(cfg Config) *Server {
 		engine: gin.Default(),
 		config: cfg,
 	}
-
 	corsConfig := cors.DefaultConfig()
 	switch env {
 	case "development":
