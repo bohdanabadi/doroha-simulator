@@ -26,6 +26,7 @@ func ScheduleJourneyAPICalls(timeChannel <-chan time.Time) {
 		}
 		fmt.Printf("Number of calls: %d\n", numCalls)
 		retrieveAndValidateJourneys(numCalls)
+
 	}
 }
 
