@@ -29,15 +29,15 @@ func NewServer(cfg Config) *Server {
 		config: cfg,
 	}
 	corsConfig := cors.DefaultConfig()
-	switch env {
-	case "development":
-		corsConfig.AllowOrigins = []string{cfg.ServerDev.CrossOrigin}
-	case "production":
-		corsConfig.AllowOrigins = []string{cfg.ServerProd.CrossOrigin}
-	default:
-		log.Fatalf("Invalid environment: %s", env)
-
-	}
+	//switch env {
+	//case "development":
+	corsConfig.AllowOrigins = []string{cfg.ServerDev.CrossOrigin}
+	//case "production":
+	//	corsConfig.AllowOrigins = []string{cfg.ServerProd.CrossOrigin}
+	//default:
+	//	log.Fatalf("Invalid environment: %s", env)
+	//
+	//}
 	corsConfig.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"}
 	corsConfig.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type"}
 	srv.engine.Use(cors.New(corsConfig))
