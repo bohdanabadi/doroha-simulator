@@ -57,7 +57,7 @@ function MapComponent() {
 
                 const startPosition = new LatLng(journey.prevPoint.Y, journey.prevPoint.X);
                 const endPosition = marker.getLatLng();
-                animateMarker(marker, startPosition, endPosition, 350);
+                animateMarker(marker, startPosition, endPosition, 300);
             }
         });
     }, [journeys]);

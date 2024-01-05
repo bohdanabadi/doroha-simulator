@@ -12,7 +12,7 @@ import (
 
 func RunSimulation(newJourneyChannel chan *dto.Journey, websocketManager *util.WebSocketManager) {
 	var activeJourneys []*dto.Journey
-	simulationTick := time.NewTicker(time.Millisecond * 500) // adjust duration as needed
+	simulationTick := time.NewTicker(time.Millisecond * 450) // adjust duration as needed
 
 	for {
 		select {
