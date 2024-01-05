@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/signal"
 	"simulator/internal/datastructures"
 	"simulator/internal/dto"
 	"simulator/internal/service"
 	"simulator/internal/util"
+	"syscall"
 	"time"
 )
 
@@ -45,7 +47,13 @@ func main() {
 	go service.PollJourneys(newJourneyChannel)
 	// Start the car movement
 	go service.RunSimulation(newJourneyChannel, websocketManager)
-	// Wait for a user input before exiting
-	fmt.Scanln()
-	log.Printf("After Scan Ln")
+
+	// Setup signal handling
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+	// Wait for a termination signal
+	<-sigs
+	// Perform any cleanup if necessary
+	fmt.Println("Performing cleanup and shutting down")
+	// Exit
 }
