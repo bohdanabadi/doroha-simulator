@@ -68,9 +68,9 @@ function MapComponent() {
             <MapContainer className={"leaflet-map"}
                 key={zoom}
                 center={center}
-                zoom={zoom + 0.42}
+                zoom={zoom}
                 minZoom={zoom}
-                scrollWheelZoom={true} // disable zoom on scroll
+                scrollWheelZoom={false} // disable zoom on scroll
                 dragging={false} // disable dragging
                 zoomControl={false}
                 maxBounds={leafletBounds.current ? leafletBounds.current : undefined}
