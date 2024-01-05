@@ -87,7 +87,6 @@ func computeEdgeCost(a, b dto.PointNode, properties map[string]interface{}) floa
 			surfaceMultiplier = multiplier
 		}
 	}
-
 	return baseDistance * surfaceMultiplier / baseSpeed
 }
 

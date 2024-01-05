@@ -46,11 +46,11 @@ jobs:
           # Add your build and deployment commands here
           go build -o traffic-simulator
           # Make sure directory exists
-          ssh ${{ secrets.USERNAME }}@165.22.233.166 "mkdir -p ${{secrets.APP_DIRECTORY}} }}"
+          ssh ${{ secrets.USERNAME }}@165.22.233.166 "mkdir -p ${{secrets.SIMULATOR_APP_DIRECTORY}} }}"
           # Copy the new binary
-          scp -v -i ~/.ssh/id_rsa traffic-simulator ${{ secrets.USERNAME }}@165.22.233.166:${{ secrets.APP_DIRECTORY }}
+          scp -v -i ~/.ssh/id_rsa traffic-simulator ${{ secrets.USERNAME }}@165.22.233.166:${{ secrets.SIMULATOR_APP_DIRECTORY }}
           # Copy the configuration file
-          scp -v -i ~/.ssh/id_rsa config.yml ${{ secrets.USERNAME }}@165.22.233.166:${{ secrets.APP_DIRECTORY }}
+          scp -v -i ~/.ssh/id_rsa config.yml ${{ secrets.USERNAME }}@165.22.233.166:${{ secrets.SIMULATOR_APP_DIRECTORY }}
           # Start the service on the remote server
-          ssh ${{ secrets.USERNAME }}@165.22.233.166 "cd ${{ secrets.APP_DIRECTORY }}; ENV=production ./traffic-simulator > /dev/null 2>&1 &"
+          ssh ${{ secrets.USERNAME }}@165.22.233.166 "cd ${{ secrets.SIMULATOR_APP_DIRECTORY }}; ENV=production ./traffic-simulator > /dev/null 2>&1 &"
         working-directory: ./simulator
