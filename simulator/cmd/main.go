@@ -15,7 +15,7 @@ var newJourneyChannel = make(chan *dto.Journey)
 var WebsocketSendDataUrl string
 
 func init() {
-	env := os.Getenv("env")
+	env := os.Getenv("ENV")
 	if env == "production" {
 		WebsocketSendDataUrl = "ws://localhost:8081/v1/ws/simulation/path"
 	} else {
