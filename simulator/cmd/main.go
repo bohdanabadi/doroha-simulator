@@ -47,4 +47,5 @@ func main() {
 	go service.RunSimulation(newJourneyChannel, websocketManager)
 	// Wait for a user input before exiting
 	fmt.Scanln()
+	log.Printf("After Scan Ln")
 }
