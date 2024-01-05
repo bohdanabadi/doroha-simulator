@@ -33,9 +33,12 @@ func main() {
 	if err != nil {
 		log.Fatal("Could not connect to server:", err)
 	}
+	log.Printf("About to defer websocket")
 	defer websocketManager.Close()
+	log.Printf("Defered success")
 	// Start the timesimulator simulation in a separate goroutine
 	go service.SimulateTime(timeChannel)
+	log.Printf("Simulate Time after")
 	// Start the API calls in a separate goroutine
 	go service.ScheduleJourneyAPICalls(timeChannel)
 	// Start the Polling for valid Journeys
