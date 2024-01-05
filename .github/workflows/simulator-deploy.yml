@@ -43,7 +43,8 @@ jobs:
 
       - name: Build and Deploy
         run: |
-          # Add your build and deployment commands here
+          # Navigate to the directory containing the Go code
+          cd cmd
           go build -o traffic-simulator
           # Make sure directory exists
           ssh ${{ secrets.USERNAME }}@165.22.233.166 "mkdir -p ${{secrets.SIMULATOR_APP_DIRECTORY}} }}"
