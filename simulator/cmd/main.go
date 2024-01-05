@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"simulator/internal/datastructures"
 	"simulator/internal/dto"
 	"simulator/internal/service"
@@ -10,11 +11,17 @@ import (
 	"time"
 )
 
-var pauseChannel = make(chan struct{})
-var resumeChannel = make(chan struct{})
 var newJourneyChannel = make(chan *dto.Journey)
-var WebsocketSendDataUrl = "ws://localhost:8080/v1/ws/simulation/path"
+var WebsocketSendDataUrl string
 
+func init() {
+	env := os.Getenv("env")
+	if env == "production" {
+		WebsocketSendDataUrl = "ws://localhost:8081/v1/ws/simulation/path"
+	} else {
+		WebsocketSendDataUrl = "ws://localhost:8080/v1/ws/simulation/path"
+	}
+}
 func main() {
 	datastructures.LoadGeoJSONGraph()
 
