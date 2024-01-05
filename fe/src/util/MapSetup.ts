@@ -27,8 +27,16 @@ export const useMapSetup = (): MapSetup => {
         setCenter([centerLatitude, centerLongitude]);
 
         const earthCircumferenceInMeters = mapSettings.earthCircumferenceInMeters;
-        const mapWidth = mapSettings.mapDimensions.width;
-        const mapHeight = mapSettings.mapDimensions.height;
+        const viewportHeight = window.innerHeight; // Height of the viewport in pixels
+
+        // Assuming your CSS values
+        const mapHeightVh = 95; // 95vh for height
+        const mapWidthVh = 130; // 130vh for width
+
+        // Convert vh to pixels
+        const mapHeight = (mapHeightVh / 100) * viewportHeight;
+        const mapWidth = (mapWidthVh / 100) * viewportHeight; //
+
 
         const longitudeDiff = Math.abs(ne[1] - sw[1]);
         const latitudeDiff = Math.abs(ne[0] - sw[0]);
