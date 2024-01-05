@@ -30,6 +30,8 @@ func (wm *WebSocketManager) Connect() error {
 			time.Sleep(15 * time.Second)
 			continue
 		}
+		log.Printf("Websocket connected successfully to api")
+
 		return nil
 	}
 }
