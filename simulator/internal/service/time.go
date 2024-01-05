@@ -1,10 +1,12 @@
 package service
 
 import (
+	"fmt"
 	"time"
 )
 
 func SimulateTime(timeChannel chan<- time.Time) {
+	fmt.Println("SimulateTime")
 	// Define the real-world duration of the simulation
 	simulationDuration := 60 * time.Minute
 
@@ -24,6 +26,8 @@ func SimulateTime(timeChannel chan<- time.Time) {
 	// Start the simulation
 	start := time.Now()
 	for t := range ticker.C {
+
+		fmt.Println("Ticker")
 		// Calculate the simulated timesimulator
 		simulatedTime := start.Add(time.Duration(float64(t.Sub(start)) * ratio))
 
