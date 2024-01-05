@@ -51,7 +51,7 @@ jobs:
           # Copy the new binary
           scp -v -i ~/.ssh/id_rsa traffic-simulator ${{ secrets.USERNAME }}@165.22.233.166:${{ secrets.SIMULATOR_APP_DIRECTORY }}
           # Copy the configuration file
-          scp -v -i ~/.ssh/id_rsa config.yml ${{ secrets.USERNAME }}@165.22.233.166:${{ secrets.SIMULATOR_APP_DIRECTORY }}
+          scp -v -i ~/.ssh/id_rsa ../filtered_kyiv.geojson ${{ secrets.USERNAME }}@165.22.233.166:${{ secrets.SIMULATOR_APP_DIRECTORY }}
           # Start the service on the remote server
           ssh ${{ secrets.USERNAME }}@165.22.233.166 "cd ${{ secrets.SIMULATOR_APP_DIRECTORY }}; ENV=production ./traffic-simulator > /dev/null 2>&1 &"
         working-directory: ./simulator
