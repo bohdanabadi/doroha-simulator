@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS journeys (
                                         ending_point_y FLOAT NOT NULL,
                                         distance FLOAT NOT NULL,
                                         date_create TIMESTAMP NOT NULL,
+                                        attempts SMALLINT,
                                         status VARCHAR(255) NOT NULL
 );
 
