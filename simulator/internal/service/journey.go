@@ -59,7 +59,7 @@ func retrieveAndValidateJourneys(numCalls int) {
 }
 func persistJourney(journey *[]dto.Journey) {
 	request := gorequest.New()
-	resp, _, errs := request.Post("http://localhost:8080/v1/journeys").Send(journey).End()
+	resp, _, errs := request.Post("http://localhost:8081/v1/journeys").Send(journey).End()
 	if errs != nil {
 		log.Fatalf("Request failed: %v", errs)
 	}
@@ -76,7 +76,7 @@ func PollJourneys(newJourneyChannel chan<- *dto.Journey) {
 	for range ticker.C {
 		request := gorequest.New()
 		var journeyResponse dto.JourneysResponse
-		resp, _, errs := request.Get("http://localhost:8080/v1/journeys?status=IN QUEUE").EndStruct(&journeyResponse)
+		resp, _, errs := request.Get("http://localhost:8081/v1/journeys?status=IN QUEUE").EndStruct(&journeyResponse)
 		if errs != nil || resp.StatusCode != 200 {
 			fmt.Printf("Error making GET request to get Valid Journeys: %v\n", errs)
 		}
@@ -97,7 +97,7 @@ func PollJourneys(newJourneyChannel chan<- *dto.Journey) {
 func updateStatusForJourney(journeyIds []int32, newStatus string) error {
 	request := gorequest.New()
 	journeyToPatch := &dto.JourneyListStatusUpdate{Ids: journeyIds, Status: newStatus}
-	resp, _, errs := request.Patch("http://localhost:8080/v1/journeys/status").Send(journeyToPatch).End()
+	resp, _, errs := request.Patch("http://localhost:8081/v1/journeys/status").Send(journeyToPatch).End()
 	if errs != nil || resp.StatusCode != 204 {
 		return fmt.Errorf("Error making PATCH request Update Journeys Status: %v\n", errs)
 	}
