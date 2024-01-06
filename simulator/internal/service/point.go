@@ -10,7 +10,7 @@ import (
 func GetPossibleJourneyPoints(ch chan<- *dto.JourneyPoints) {
 	request := gorequest.New()
 	respDto := &dto.JourneyPoints{}
-	_, _, errs := request.Get("http://localhost:8080/v1/points/random-pair").EndStruct(respDto)
+	_, _, errs := request.Get("http://localhost:8081/v1/points/random-pair").EndStruct(respDto)
 	if errs != nil {
 		fmt.Printf("Error making GET request to get POINTS: %v\n", errs)
 		return
