@@ -1,4 +1,4 @@
-import {MapContainer, TileLayer, Marker} from "react-leaflet";
+import  {MapContainer, TileLayer, Marker} from "react-leaflet";
 import 'leaflet-rotatedmarker'; // Import the plugin
 
 import {useMapSetup} from "../util/MapSetup";
@@ -74,7 +74,7 @@ function MapComponent() {
                 }
             }
         });
-    }, [markers]);
+    }, [markers, journeys, removeJourney]);
 
     return (
         <div className={"leaflet-map-div"}>
