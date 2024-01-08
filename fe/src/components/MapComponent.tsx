@@ -3,12 +3,10 @@ import 'leaflet-rotatedmarker'; // Import the plugin
 
 import {useMapSetup} from "../util/MapSetup";
 import {JourneyListContext} from "../util/JourneyListContext";
-import {useContext, useEffect, useRef} from "react";
+import {useContext, useEffect, useMemo, useRef} from "react";
 import carIconUrl from "../assets/car.png"
 import L, {LatLng} from "leaflet";
 import "../assets/css/MapComponent.css"
-
-
 function animateMarker(marker : L.Marker, startPosition : LatLng, endPosition : LatLng, duration : number) {
     let startTime: number;
     function animate(time: number) {
@@ -36,32 +34,47 @@ function MapComponent() {
     const {center, zoom, leafletBounds} = useMapSetup();
     const {journeys, removeJourney} = useContext(JourneyListContext);
     const markerRefs = useRef(new Map());
-    useEffect(() => {
-        journeys.forEach((journey, id) => {
-            if(journey.status === "FINISHED"){
-                removeJourney(id);
-            }
-        });
-    })
-    const carIcon = L.icon({
-        iconUrl: carIconUrl, // URL to the car icon image
-        iconSize: [32, 32], // Size of the icon
-        iconAnchor: [16, 16], // Point of the icon which will correspond to marker's location
-        popupAnchor: [0, -19] // Point from which the popup should open relative to the iconAnchor
+    const lastPositionsRef = useRef(new Map());
+
+    const carIcon = L.divIcon({
+        className: 'car-icon',
+        html: `<img src="${carIconUrl}" width="32" height="32">`,
+        iconSize: [32, 32],
+        iconAnchor: [16, 16],
+        popupAnchor: [0, -19]
     });
 
-    useEffect(() => {
-        journeys.forEach((journey, id) => {
-            const marker = markerRefs.current.get(id);
-            if (marker) {
+    const markers = useMemo(() => Array.from(journeys.entries()).map(([id, journey]) => ({
+        id,
+        position: new LatLng(journey.currentPoint.Y, journey.currentPoint.X),
+        bearing: journey.bearing
 
-                const startPosition = new LatLng(journey.prevPoint.Y, journey.prevPoint.X);
-                const endPosition = marker.getLatLng();
-                animateMarker(marker, startPosition, endPosition, 300);
+    })), [journeys]);
+
+    useEffect(() => {
+        markers.forEach(({id, position, bearing}) => {
+            const marker = markerRefs.current.get(id);
+            const lastPosition = lastPositionsRef.current.get(id);
+            const journey = journeys.get(id);
+            if (marker) {
+                if(journey !== undefined && journey.status === "FINISHED"){
+                    // Remove journey from state
+                    removeJourney(id);
+                } else {
+                    const hasPositionChanged = !lastPosition ||
+                        lastPosition.lat !== position.lat ||
+                        lastPosition.lng !== position.lng;
+                    if (hasPositionChanged) {
+                        // Animate and update marker
+                        animateMarker(marker, lastPosition || position, position, 400);
+                        marker.setRotationAngle(bearing);
+                        // Update the last known position
+                        lastPositionsRef.current.set(id, position);
+                    }
+                }
             }
         });
-    }, [journeys]);
-
+    }, [markers]);
 
     return (
         <div className={"leaflet-map-div"}>
@@ -80,11 +93,11 @@ function MapComponent() {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 />
-                {Array.from(journeys.entries()).map(([id, journey]) => {
-                    return <Marker key={`${id}-${journey.bearing}`}
-                                   position={[journey.currentPoint.Y, journey.currentPoint.X]}
+                {markers.map(({id, position, bearing}) =>  {
+                    return <Marker key={id}
+                                   position={position}
                                    icon={carIcon}
-                                   rotationAngle={journey.bearing}
+                                   rotationAngle={bearing}
                                    rotationOrigin="center"
                                    ref={(ref) => {
                                        if (ref) {
