@@ -15,7 +15,6 @@ function Homepage () {
     useEffect(() => {
         const websocketEndpoint:string | undefined   = process.env.REACT_APP_API_WEBSOCKET;
         if (typeof websocketEndpoint === 'string' && websocketEndpoint.trim() !== '') {
-            console.log("inside");
             // Valid endpoint, proceed with the connection
             const webSocketClient = new WebSocketClient(websocketEndpoint, 5);
             const handleMessage = (message: string) => {
