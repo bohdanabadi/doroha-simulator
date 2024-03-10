@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/bohdanabadi/Traffic-Simulation/api/broadcast"
+	"github.com/bohdanabadi/Traffic-Simulation/api/observibility"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"log"
@@ -18,7 +19,7 @@ func HandleSimulationConnection(c *gin.Context) {
 
 	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
-
+		observibility.GetMetrics().LogErrorCounter()
 		log.Println("Failed to upgrade to websocket:", err)
 		return
 	}

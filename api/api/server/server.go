@@ -2,10 +2,12 @@ package server
 
 import (
 	"github.com/bohdanabadi/Traffic-Simulation/api/api/handler"
+	"github.com/bohdanabadi/Traffic-Simulation/api/observibility"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log"
-	"net/http"
 	"os"
 )
 
@@ -17,7 +19,6 @@ type Server struct {
 }
 
 func NewServer(cfg Config) *Server {
-	// Here you could add a switch to start the server with TLS or without depending on the configuration
 	env = os.Getenv("ENV")
 	if env == "dev" || env == "" {
 		env = "development"
@@ -45,17 +46,31 @@ func NewServer(cfg Config) *Server {
 
 func (srv *Server) StartServer() error {
 	var err error
+	//prometheus.MustRegister()
+	//srv.engine.GET("/metrics", gin.WrapH(promhttp.Handler()))
+	reg := prometheus.NewRegistry()
+	m := observibility.GetMetrics()
+	m.Register(reg)
+
+	promHandler := promhttp.HandlerFor(reg, promhttp.HandlerOpts{Registry: reg})
+
+	srv.engine.GET("/metrics", gin.WrapH(promHandler))
+
 	v1 := srv.engine.Group("/v1")
+	v1.Use(m.RequestDurationMiddleware())
+
 	{
-		v1.GET("/fe", func(context *gin.Context) {
-			context.JSON(http.StatusOK, gin.H{"message": "Hi!, Component data not found. Time to useState!"})
-		})
 		v1.GET("points/random-pair", handler.GetPotentialJourneyPoints)
 		v1.POST("journeys", handler.CreateJourney)
 		v1.GET("journeys", handler.GetJourney)
 		v1.PATCH("journeys/status", handler.UpdateJourneyStatus)
 		v1.GET("ws/simulation/path", handler.HandleSimulationConnection)
 		v1.GET("ws/fe/path", handler.HandleFrontendConnection)
+	}
+
+	internal := srv.engine.Group("/observability")
+	{
+		internal.GET("metrics", handler.GetMetrics)
 	}
 
 	switch env {

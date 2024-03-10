@@ -5,26 +5,29 @@ import (
 	"github.com/bohdanabadi/Traffic-Simulation/api/api/apperror"
 	openapi "github.com/bohdanabadi/Traffic-Simulation/api/api/generated/go"
 	"github.com/bohdanabadi/Traffic-Simulation/api/api/service"
+	"github.com/bohdanabadi/Traffic-Simulation/api/observibility"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 func CreateJourney(c *gin.Context) {
-
 	var journey []openapi.Journey
 	if err := c.ShouldBindJSON(&journey); err != nil {
+		observibility.GetMetrics().LogErrorCounter()
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	// Validate the journey fields
 	if !validateJourney(journey) {
+		observibility.GetMetrics().LogErrorCounter()
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid journey data"})
 		return
 	}
 
 	// Call your journey creation service here
 	if err := service.CreateJourney(&journey); err != nil {
+		observibility.GetMetrics().LogErrorCounter()
 		var appErr *apperror.AppError
 		if errors.As(err, &appErr) {
 			c.JSON(appErr.Code, gin.H{"error": appErr.Description})
@@ -41,12 +44,14 @@ func GetJourney(c *gin.Context) {
 
 	if exists {
 		if !validateJourneyStatus(status) {
+			observibility.GetMetrics().LogErrorCounter()
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid status"})
 			return
 		}
 	}
 	journeys, err := service.GetJourneys(status)
 	if err != nil {
+		observibility.GetMetrics().LogErrorCounter()
 		var appErr *apperror.AppError
 		if errors.As(err, &appErr) {
 			c.JSON(appErr.Code, gin.H{"error": appErr.Description})
@@ -61,14 +66,17 @@ func GetJourney(c *gin.Context) {
 func UpdateJourneyStatus(c *gin.Context) {
 	var journeyToPatch openapi.JourneyListStatus
 	if err := c.ShouldBindJSON(&journeyToPatch); err != nil {
+		observibility.GetMetrics().LogErrorCounter()
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	if !validateJourneyStatus(journeyToPatch.Status) {
+		observibility.GetMetrics().LogErrorCounter()
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid status"})
 		return
 	}
 	if err := service.UpdateJourneysStatus(&journeyToPatch); err != nil {
+		observibility.GetMetrics().LogErrorCounter()
 		var appErr *apperror.AppError
 		if errors.As(err, &appErr) {
 			c.JSON(appErr.Code, gin.H{"error": appErr.Description})
