@@ -1,15 +1,15 @@
 package main
 
 import (
-	"fmt"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log"
-	"os"
-	"os/signal"
+	"net/http"
 	"simulator/internal/datastructures"
 	"simulator/internal/dto"
 	"simulator/internal/service"
 	"simulator/internal/util"
-	"syscall"
+	"simulator/observibility"
 	"time"
 )
 
@@ -17,14 +17,16 @@ var newJourneyChannel = make(chan *dto.Journey)
 var WebsocketSendDataUrl string
 
 func init() {
-	env := os.Getenv("ENV")
-	if env == "production" {
-		WebsocketSendDataUrl = "ws://localhost:8081/v1/ws/simulation/path"
-	} else {
-		WebsocketSendDataUrl = "ws://localhost:8080/v1/ws/simulation/path"
-	}
+	WebsocketSendDataUrl = "ws://localhost:8081/v1/ws/simulation/path"
+	//env := os.Getenv("ENV")
+	//if env == "production" {
+	//	WebsocketSendDataUrl = "ws://localhost:8081/v1/ws/simulation/path"
+	//} else {
+	//	WebsocketSendDataUrl = "ws://localhost:8081/v1/ws/simulation/path"
+	//}
 }
 func main() {
+
 	datastructures.LoadGeoJSONGraph()
 
 	// Create a channel to communicate the simulated timesimulator
@@ -35,9 +37,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Could not connect to server:", err)
 	}
-	log.Printf("About to defer websocket")
 	defer websocketManager.Close()
-	log.Printf("Defered success")
 	// Start the timesimulator simulation in a separate goroutine
 	go service.SimulateTime(timeChannel)
 	log.Printf("Simulate Time after")
@@ -49,11 +49,11 @@ func main() {
 	go service.RunSimulation(newJourneyChannel, websocketManager)
 
 	// Setup signal handling
-	sigs := make(chan os.Signal, 1)
-	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
-	// Wait for a termination signal
-	<-sigs
-	// Perform any cleanup if necessary
-	fmt.Println("Performing cleanup and shutting down")
+	reg := prometheus.NewRegistry()
+	m := observibility.GetMetrics()
+	m.Register(reg)
+	promHandler := promhttp.HandlerFor(reg, promhttp.HandlerOpts{Registry: reg})
+	http.Handle("/metrics", promHandler)
+	http.ListenAndServe(":8080", nil)
 	// Exit
 }

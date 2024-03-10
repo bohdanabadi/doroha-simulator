@@ -18,7 +18,7 @@ func ScheduleJourneyAPICalls(timeChannel <-chan time.Time) {
 		// Make API calls more frequently
 		if hour >= 7 && hour < 10 || hour > 16 && hour < 18 {
 			fmt.Printf("Making API calls more frequently at hour: %d\n", hour)
-			numCalls = 0 + rand.Intn(2)
+			numCalls = 0 + rand.Intn(3)
 		} else {
 			// Make API calls less frequently
 			fmt.Printf("Making API calls less frequently: %d\n\n", hour)
@@ -107,7 +107,6 @@ func updateStatusForJourney(journeyIds []int32, newStatus string) error {
 // InitiateActiveJourney initiates the active journey by creating a new journey with the path and total cost
 // of the inQueueJourney and sending it to the newJourneyChannel to be added to the active journeys list
 func initiateActiveJourney(inQueueJourney dto.Journey, newJourneyChannel chan<- *dto.Journey) {
-	//TODO start here
 	path, totalCost, err := AStar(&inQueueJourney) // Define the path of the inQueueJourney
 
 	if err != nil {
