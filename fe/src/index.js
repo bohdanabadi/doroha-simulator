@@ -6,7 +6,7 @@ import 'leaflet/dist/leaflet.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Homepage from "./pages/Homepage.tsx";
 import MetricPage from "./pages/MetricPage";
-import styles from "./assets/css/index.css"
+import "./assets/css/index.css"
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import ErrorPage from "./pages/ErrorPage";
 

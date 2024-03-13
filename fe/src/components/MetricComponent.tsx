@@ -4,7 +4,7 @@ import {convertTimestampToLocalDateTime, HealthColorMapping, HealthKey} from "..
 function MetricComponent(metricName: string) {
 
     const [duration, setDuration] = useState('1h'); // Default duration
-    const [data, isLoading, error] = useFetchMetrics(metricName, duration);
+    const [data, isLoading] = useFetchMetrics(metricName, duration);
 
     const handleDurationChange = (newDuration: SetStateAction<string>) => {
         setDuration(newDuration);
