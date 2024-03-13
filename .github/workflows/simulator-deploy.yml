@@ -53,5 +53,5 @@ jobs:
           # Copy the configuration file
           scp -v -i ~/.ssh/id_rsa ../filtered_kyiv.geojson ${{ secrets.USERNAME }}@165.22.233.166:${{ secrets.SIMULATOR_APP_DIRECTORY }}
           # Start the service on the remote server
-          ssh ${{ secrets.USERNAME }}@165.22.233.166 "cd ${{ secrets.SIMULATOR_APP_DIRECTORY }}; ENV=production ./traffic-simulator > simulation-simulator.log 2>&1 &"
+          ssh ${{ secrets.USERNAME }}@165.22.233.166 "cd ${{ secrets.SIMULATOR_APP_DIRECTORY }}; ENV=production ./traffic-simulator > /dev/null 2>&1 &"
         working-directory: ./simulator
