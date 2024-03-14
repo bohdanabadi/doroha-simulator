@@ -83,7 +83,7 @@ func GetMetric(metricName string, d time.Duration) (*openapi.Metric, error) {
 			metricHealth = getMetricHealth(metricName, prometheus.Data.Result[0].Values[1], maxMetric15Days.Data.Result[0].Values)
 		}
 
-		metric := openapi.Metric{MetricType: metricName, MetricTime: prometheus.Data.Result[0].Values[0],
+		metric := openapi.Metric{MetricType: metricName, MetricTime: prometheus.Data.Result[0].Values[0].(float64),
 			MetricHealth: metricHealth, MetricValue: roundToFourDecimalPlaces(prometheus.Data.Result[0].Values[1])}
 		err = cache.AppCache.Add(cache.GenerateKey(metricName, d), &metric, cache.AppCacheExpiration)
 		if err != nil {

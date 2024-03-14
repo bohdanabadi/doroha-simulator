@@ -125,5 +125,10 @@ components:
       properties:
         metricType:
           type: string
+        metricTime:
+          type: number
+          format: float64
+        metricHealth:
+          type: string
         metricValue:
-          type: object
+          type: string

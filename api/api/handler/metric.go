@@ -17,6 +17,9 @@ func GetMetrics(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid metric type data"})
 			return
 		}
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing query param"})
+		return
 	}
 
 	durationString, exists := c.GetQuery("duration")
@@ -29,6 +32,9 @@ func GetMetrics(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid duration data"})
 			return
 		}
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing query param"})
+		return
 	}
 
 	if err != nil {
@@ -42,7 +48,7 @@ func GetMetrics(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	if metric.MetricValue == nil {
+	if len(metric.MetricValue) == 0 {
 		c.JSON(http.StatusNoContent, nil)
 	}
 
