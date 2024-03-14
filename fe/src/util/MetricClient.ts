@@ -37,7 +37,7 @@ export function useFetchMetrics(metricType: string, duration: string): [MetricRe
         const fetchData = async () => {
             setIsLoading(true);
             try {
-                const response = await fetch(process.env.REACT_APP_API_METRICS + `?metricType=${metricType}&duration=${duration}`);
+                const response = await fetch(process.env.REACT_APP_API_METRICS+ `?metricType=${metricType}&duration=${duration}`);
                 if(!response.ok){
                     throw new Error('Net response was not ok')
                 }
