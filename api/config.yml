@@ -5,4 +5,4 @@ serverDev:
 serverProd:
   host: "localhost"
   port: "8081"
-  cross-origin: "https://www.traffic.bohdanabadi.com"
+  cross-origin: "https://www.journeys.bohdanabadi.com"
