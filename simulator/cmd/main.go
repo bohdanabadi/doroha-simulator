@@ -17,7 +17,6 @@ var newJourneyChannel = make(chan *dto.Journey)
 var WebsocketSendDataUrl string
 
 func init() {
-	WebsocketSendDataUrl = "ws://localhost:8081/v1/ws/simulation/path"
 	//env := os.Getenv("ENV")
 	//if env == "production" {
 	//	WebsocketSendDataUrl = "ws://localhost:8081/v1/ws/simulation/path"
@@ -40,7 +39,6 @@ func main() {
 	defer websocketManager.Close()
 	// Start the timesimulator simulation in a separate goroutine
 	go service.SimulateTime(timeChannel)
-	log.Printf("Simulate Time after")
 	// Start the API calls in a separate goroutine
 	go service.ScheduleJourneyAPICalls(timeChannel)
 	// Start the Polling for valid Journeys
@@ -54,6 +52,6 @@ func main() {
 	m.Register(reg)
 	promHandler := promhttp.HandlerFor(reg, promhttp.HandlerOpts{Registry: reg})
 	http.Handle("/metrics", promHandler)
-	http.ListenAndServe(":8080", nil)
+	err = http.ListenAndServe(":8080", nil)
 	// Exit
 }
