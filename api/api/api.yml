@@ -127,7 +127,7 @@ components:
           type: string
         metricTime:
           type: number
-          format: float64
+          format: double
         metricHealth:
           type: string
         metricValue:
