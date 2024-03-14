@@ -6,7 +6,6 @@ import {JourneyListContext} from "../util/JourneyListContext";
 import {useContext, useEffect, useMemo, useRef} from "react";
 import carIconUrl from "../assets/car.png"
 import L, {LatLng} from "leaflet";
-import "../assets/css/MapComponent.css"
 function animateMarker(marker : L.Marker, startPosition : LatLng, endPosition : LatLng, duration : number) {
     let startTime: number;
     function animate(time: number) {
@@ -38,7 +37,7 @@ function MapComponent() {
 
     const carIcon = L.divIcon({
         className: 'car-icon',
-        html: `<img src="${carIconUrl}" width="32" height="32">`,
+        html: `<img src="${carIconUrl}" class="w-7 h-7">`, // Adjust the width and height using Tailwind CSS classes
         iconSize: [32, 32],
         iconAnchor: [16, 16],
         popupAnchor: [0, -19]
@@ -77,8 +76,8 @@ function MapComponent() {
     }, [markers, journeys, removeJourney]);
 
     return (
-        <div className={"leaflet-map-div"}>
-            <MapContainer className={"leaflet-map"}
+        // <div className={"leaflet-map-div"}>
+            <MapContainer className="h-screen" style={{ height: "calc(100vh - 75px)" }}
                 key={zoom}
                 center={center}
                 zoom={zoom}
@@ -109,7 +108,7 @@ function MapComponent() {
                 })}
             </MapContainer>
 
-        </div>
+        // </div>
     );
 }
 

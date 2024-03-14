@@ -4,7 +4,6 @@ import CardContent from '@mui/material/CardContent';
 import Card from '@mui/material/Card';
 import {Box, LinearProgress, LinearProgressProps} from "@mui/material";
 import {grey} from "@mui/material/colors";
-import "../assets/css/JourneyCardComponent.css"
 
 
 interface JourneyCardProps {

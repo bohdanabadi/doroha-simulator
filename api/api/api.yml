@@ -120,3 +120,15 @@ components:
               format: int32
           status:
             type: string
+    Metric:
+      type: object
+      properties:
+        metricType:
+          type: string
+        metricTime:
+          type: number
+          format: double
+        metricHealth:
+          type: string
+        metricValue:
+          type: string

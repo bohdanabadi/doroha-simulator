@@ -1,19 +1,19 @@
-import {useEffect, useMemo, useState} from "react";
-import ActiveJourneyList from "../components/ActiveJourneyListComponent";
+import React, {useEffect, useMemo, useState} from "react";
+import ActiveJourneyList from "../components/ActiveJourneySideBarComponent";
 import {Journey} from "../types/Journey";
 import MapComponent from "../components/MapComponent";
-import "../assets/css/HomePage.css"
 import {JourneyListContext} from "../util/JourneyListContext";
 import {calculateBearing} from "../util/CarIconBearingCalculator";
 import WebSocketClient from "../util/WebSocketClient";
+import NavBarComponent from "../components/NavBarComponent";
 
 
-function Homepage () {
+function Homepage() {
 
     const [journeys, setJourneys] = useState<Map<number, Journey>>(new Map());
 
     useEffect(() => {
-        const websocketEndpoint:string | undefined   = process.env.REACT_APP_API_WEBSOCKET;
+        const websocketEndpoint: string | undefined = process.env.REACT_APP_API_WEBSOCKET;
         if (typeof websocketEndpoint === 'string' && websocketEndpoint.trim() !== '') {
             // Valid endpoint, proceed with the connection
             const webSocketClient = new WebSocketClient(websocketEndpoint, 5);
@@ -58,15 +58,20 @@ function Homepage () {
     }), [journeys, setJourneys]);
 
     return (
-        <div className="home-container">
-            <JourneyListContext.Provider value={journeyContextMemo}>
-            <div className="map-container">
-                    <MapComponent/>
+        <div className="min-h-screen items-center justify-center bg-gray-100">
+            <div className="mx-auto w-4/5 bg-white p-1 rounded shadow">
+                <NavBarComponent/>
+                <div className= "flex">
+                <JourneyListContext.Provider value={journeyContextMemo}>
+                    <div className="p-1 w-5/6 h-full">
+                        <MapComponent/>
+                    </div>
+                    <div className= "p-1 w-1/6 h-full">
+                        <ActiveJourneyList/>
+                    </div>
+                </JourneyListContext.Provider>
                 </div>
-                <div className="journey-list">
-                    <ActiveJourneyList/>
-                </div>
-            </JourneyListContext.Provider>
+            </div>
         </div>
     )
 }

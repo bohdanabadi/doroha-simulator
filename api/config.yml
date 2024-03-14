@@ -1,6 +1,6 @@
 serverDev:
   host: "localhost"
-  port: "8080"
+  port: "8081"
   cross-origin: "http://localhost:3000"
 serverProd:
   host: "localhost"

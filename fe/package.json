@@ -12,7 +12,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@turf/turf": "^6.5.0",
     "@types/leaflet": "^1.9.8",
-    "bootstrap": "^5.3.2",
+    "bootstrap": "^5.3.3",
     "d3": "^7.8.5",
     "d3-geo": "^3.1.0",
     "d3-geo-projection": "^4.0.0",
@@ -25,10 +25,11 @@
     "leaflet.marker.slideto": "^0.3.0",
     "osmtogeojson": "^3.0.0-beta.5",
     "react": "^18.0.0",
-    "react-bootstrap": "^2.9.1",
+    "react-bootstrap": "^2.10.1",
     "react-dom": "^18.0.0",
     "react-leaflet": "^4.2.1",
     "react-map-gl": "^7.0.25",
+    "react-router-dom": "^6.22.1",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
@@ -58,6 +59,9 @@
   },
   "devDependencies": {
     "@types/leaflet-rotatedmarker": "^0.2.5",
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.11",
+    "tailwindcss": "^3.4.1",
     "typescript": "^4.9.5"
   }
 }

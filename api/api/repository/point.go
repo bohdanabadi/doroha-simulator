@@ -6,6 +6,8 @@ import (
 	"github.com/bohdanabadi/Traffic-Simulation/api/api/apperror"
 	"github.com/bohdanabadi/Traffic-Simulation/api/api/model"
 	"github.com/bohdanabadi/Traffic-Simulation/api/db"
+	"github.com/bohdanabadi/Traffic-Simulation/api/observibility"
+	"time"
 )
 
 func GetRandomStartAndEndPoints() (model.Point, error) {
@@ -38,9 +40,12 @@ func GetRandomStartAndEndPoints() (model.Point, error) {
 				ST_Distance(starting_point.point::geography, ending_point.point::geography) > 1000
 		LIMIT 1;
 	`
+
 	//Retry Mechanism the query might return empty result as the 2 points are distances less than 1000
 	const maxRetries = 10
 	retryCount := 0
+	m := observibility.GetMetrics()
+	startTime := time.Now()
 	for retryCount < maxRetries {
 		row := db.DB.Raw(sqlQuery).Row() // (*sql.Row)
 		err := row.Scan(&point.StartingPointX, &point.StartingPointY, &point.EndingPointX, &point.EndingPointY, &point.Distance)
@@ -53,6 +58,8 @@ func GetRandomStartAndEndPoints() (model.Point, error) {
 				return model.Point{}, err
 			}
 		} else {
+			duration := time.Since(startTime)
+			m.DBQueryLatency.Observe(duration.Seconds())
 			return point, nil
 		}
 	}

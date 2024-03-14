@@ -1,0 +1,51 @@
+name: Deploy Prometheus
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
+      - name: Build Docker image
+        run: |
+          cd prometheus
+          docker build -t doroha-prometheus .
+          cd ..
+          docker save doroha-prometheus > doroha-prometheus.tar
+          
+          
+      - name: Transfer Docker image to server
+        run: |
+          # Write the SSH private key to a temporary file
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key
+          chmod 600 ssh_key
+          # Use the temporary file for SCP
+          scp -o StrictHostKeyChecking=no -i ssh_key doroha-prometheus.tar ${{ secrets.USERNAME }}@165.22.233.166:~/
+          # Clean up the temporary key file
+          rm ssh_key    
+          
+          
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: 165.22.233.166
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            mkdir -p /var/www/databases
+            # Remove the existing .tar file, ignore error if it doesn't exist
+            rm -f /var/www/databases/doroha-prometheus.tar || true
+            # Move the new Docker image tar file
+            mv ~/doroha-prometheus.tar /var/www/databases
+            # Stop Running Container
+            docker ps -q --filter "publish=5432" | xargs -r docker stop
+            # Remove docker image
+            docker rmi -f doroha-prometheus:latest || true
+            # Load docker image
+            docker load < /var/www/databases/doroha-prometheus.tar
+            # Run the new container
+            docker run -d -p 5432:5432 -e POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} doroha-prometheus`

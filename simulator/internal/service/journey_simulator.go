@@ -7,40 +7,41 @@ import (
 	"simulator/internal/datastructures"
 	"simulator/internal/dto"
 	"simulator/internal/util"
+	"simulator/observibility"
 	"time"
 )
 
 func RunSimulation(newJourneyChannel chan *dto.Journey, websocketManager *util.WebSocketManager) {
 	var activeJourneys []*dto.Journey
 	simulationTick := time.NewTicker(time.Millisecond * 400) // adjust duration as needed
-
+	journeyTimeToCompleteMap := make(map[int32]time.Time)
 	for {
 		select {
 		case newJourney := <-newJourneyChannel:
 			activeJourneys = append(activeJourneys, newJourney)
+			journeyTimeToCompleteMap[newJourney.Id] = time.Now()
 		case <-simulationTick.C:
 			// Simulate movement for all active journeys
 			var movedJourneys []*dto.Journey // Assuming Journey is the type of the journeys
 			for _, j := range activeJourneys {
-				// Update journey position...
-
 				processJourney(j)
 				message, err := json.Marshal(j)
 				if err != nil {
 					log.Println("Failed to marshal buffer:", err)
-					return
+					observibility.GetMetrics().LogFailedSimulatedJourney()
+					continue
 				}
 				err = websocketManager.Send(message)
 				if err != nil {
 					log.Println("Failed to send via websocket, error stack:", err)
+					observibility.GetMetrics().LogFailedSimulatedJourney()
 				} else if reachedEnd(j) {
-					// Skip appending this journey to updatedJourneys
-					//err := updateStatusForJourney([]int32{j.Id}, string(dto.Finished))
-					if err != nil {
-						log.Println("Failed to update journey status:", err)
-						return
-					}
 					log.Printf("Journey with id %d has reach its end\n", j.Id)
+					go updateStatusForJourney([]int32{j.Id}, string(dto.Finished))
+					observibility.GetMetrics().LogTimeToFinishSimulation(time.Since(journeyTimeToCompleteMap[j.Id]))
+					observibility.GetMetrics().LogJourneyDistance(j.Distance)
+					observibility.GetMetrics().LogSuccessfulSimulatedJourney()
+					// Skipping appending this journey as it has reached its end
 					continue
 				}
 				movedJourneys = append(movedJourneys, j)
@@ -52,13 +53,11 @@ func RunSimulation(newJourneyChannel chan *dto.Journey, websocketManager *util.W
 }
 
 func processJourney(j *dto.Journey) {
-
 	updateVehiclePosition(j)
 	updateProgress(j)
 	checkAndUpdateStatus(j)
 }
 func updateVehiclePosition(j *dto.Journey) {
-	//TODO Movement factor should be calculated based on the speed of the vehicle
 	key := fmt.Sprintf("%f,%f", j.CurrentPointNode.X, j.CurrentPointNode.Y)
 	nextCurrentPair := j.Path.GetPair(key).Next()
 	movementFactor := calculateMovementFactor(&j.CurrentPointNode, &nextCurrentPair.Value, 200)
