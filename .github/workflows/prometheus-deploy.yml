@@ -36,16 +36,16 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            mkdir -p /var/www/databases
+            mkdir -p /var/www/prometheus
             # Remove the existing .tar file, ignore error if it doesn't exist
-            rm -f /var/www/databases/doroha-prometheus.tar || true
+            rm -f /var/www/prometheus/doroha-prometheus.tar || true
             # Move the new Docker image tar file
-            mv ~/doroha-prometheus.tar /var/www/databases
+            mv ~/doroha-prometheus.tar /var/www/prometheus
             # Stop Running Container
             docker ps -q --filter "publish=5432" | xargs -r docker stop
             # Remove docker image
             docker rmi -f doroha-prometheus:latest || true
             # Load docker image
-            docker load < /var/www/databases/doroha-prometheus.tar
+            docker load < /var/www/prometheus/doroha-prometheus.tar
             # Run the new container
             docker run -d -p 5432:5432 -e POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} doroha-prometheus`
