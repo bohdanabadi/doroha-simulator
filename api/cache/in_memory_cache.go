@@ -14,7 +14,6 @@ var AppCacheExpiration = 45 * time.Second
 func NewCache() {
 	AppCache = cache.New(AppCacheExpiration, 5*time.Minute)
 }
-
 func GenerateKey(metricName string, d time.Duration) string {
 	inputData := metricName + d.String()
 
