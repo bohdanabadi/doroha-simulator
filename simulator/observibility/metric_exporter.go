@@ -78,7 +78,6 @@ func (m *Metrics) LogSuccessfulSimulatedJourney() {
 	log.Printf("Counter increasing success counter")
 	m.SuccessfullySimulatedJourneysCounter.Inc()
 }
-
 func (m *Metrics) LogFailedSimulatedJourney() {
 	m.FailedSimulatedJourneyCounter.Inc()
 }
