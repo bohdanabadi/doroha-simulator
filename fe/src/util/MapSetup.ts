@@ -8,7 +8,6 @@ type MapSetup = {
     zoom: number;
     leafletBounds: React.MutableRefObject<LatLngBounds | null>;
 };
-
 export const useMapSetup = (): MapSetup => {
     // Define state for center and zoom
     const [center, setCenter] = useState<LatLngTuple>([0, 0]); // Default values
