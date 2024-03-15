@@ -48,4 +48,4 @@ jobs:
             # Load docker image
             docker load < /var/www/prometheus/doroha-prometheus.tar
             # Run the new container
-            docker run -d -p 9090:9090 doroha-prometheus
+            docker run -d -p 9090:9090 --add-host host.docker.internal:host-gateway doroha-prometheus
