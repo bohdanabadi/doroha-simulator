@@ -5,6 +5,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log"
 	"net/http"
+	"os"
 	"simulator/internal/datastructures"
 	"simulator/internal/dto"
 	"simulator/internal/service"
@@ -17,12 +18,12 @@ var newJourneyChannel = make(chan *dto.Journey)
 var WebsocketSendDataUrl string
 
 func init() {
-	//env := os.Getenv("ENV")
-	//if env == "production" {
-	//	WebsocketSendDataUrl = "ws://localhost:8081/v1/ws/simulation/path"
-	//} else {
-	//	WebsocketSendDataUrl = "ws://localhost:8081/v1/ws/simulation/path"
-	//}
+	env := os.Getenv("ENV")
+	if env == "production" {
+		WebsocketSendDataUrl = "ws://localhost:8081/v1/ws/simulation/path"
+	} else {
+		WebsocketSendDataUrl = "ws://localhost:8081/v1/ws/simulation/path"
+	}
 }
 func main() {
 
