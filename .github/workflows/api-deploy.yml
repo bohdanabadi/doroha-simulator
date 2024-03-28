@@ -48,4 +48,4 @@ jobs:
             # Load docker image
             docker load < ${{ secrets.API_APP_DIRECTORY }}/doroha-api.tar
             # Run the new container
-            docker run -d -p 8081:8081 --network="host" -e ENV=production DB_NAME=traffic_db -e DB_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} -e DB_PORT=5432 -e DB_USER=trafficUser21 -e DB_NAME=traffic_db -e DB_HOST=localhost doroha-api > /dev/null 2>&1 &
+            docker run -d -p 8081:8081 --network="host" -e ENV=production -e DB_NAME=traffic_db -e DB_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} -e DB_PORT=5432 -e DB_USER=trafficUser21 -e DB_NAME=traffic_db -e DB_HOST=localhost doroha-api > /dev/null 2>&1 &
