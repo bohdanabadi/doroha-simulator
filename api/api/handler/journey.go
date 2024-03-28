@@ -122,4 +122,5 @@ func validateJourneyStatus(status string) bool {
 		return false
 	}
 	return true
+
 }
