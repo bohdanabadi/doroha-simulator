@@ -1,22 +1,21 @@
-# Start from the official Go image
-FROM golang:1.20
-# Install Node.js, npm, and Java
+# Build stage
+FROM golang:1.20 AS builder
+WORKDIR /api
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+# Install Node.js, npm, and necessary packages
 RUN apt-get update && \
     apt-get install -y nodejs npm && \
-    apt-get clean && \
     npm install -g @openapitools/openapi-generator-cli && \
     apt-get install -y default-jdk && \
     apt-get clean
-# Set the Current Working Directory inside the container.
-WORKDIR /api
-# Copy go mod and sum files
-COPY go.mod go.sum ./
-# Download all dependencies.
-RUN go mod download
-# Copy the project directory (filtered by .dockerignore)
-COPY . .
-# Build your application.
 RUN CGO_ENABLED=0 GOOS=linux go generate ./cmd/
 RUN CGO_ENABLED=0 GOOS=linux go build -o doroha-api ./cmd/
-# Run
+
+# Final stage
+FROM alpine:3.15
+WORKDIR /root/
+COPY --from=builder /api/doroha-api .
+COPY --from=builder /api/config.yml .
 CMD ["./doroha-api"]
