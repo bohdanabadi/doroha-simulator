@@ -4,7 +4,6 @@ export interface Journey {
     endingPoint: Point;
     currentPoint: Point;
     prevPoint: Point;
-    // Path: omitted as it might not be necessary for frontend or needs a specific implementation
     bearing: number;
     progress: number
     distance: number;

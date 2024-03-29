@@ -40,8 +40,8 @@ function JourneyCard( {journey}: Readonly<JourneyCardProps>) {
             <Typography gutterBottom variant="h5" component="div" align={"center"} color={grey[500]}>
                 {journey.id}
             </Typography>
-            <Typography sx={{ mb: 1.5, fontSize: 14 , color:grey[500]}}>
-                {readableDistance}
+            <Typography sx={{ mb: 1.5, fontSize: 14 , color:grey[500]}} align={"center"}>
+                Distance {readableDistance}
             </Typography>
             <LinearProgressWithLabel value={journey.progress * 100} />
         </CardContent>

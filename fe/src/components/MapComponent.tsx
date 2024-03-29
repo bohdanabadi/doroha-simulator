@@ -1,4 +1,4 @@
-import  {MapContainer, TileLayer, Marker} from "react-leaflet";
+import {MapContainer, TileLayer, Marker, Tooltip} from "react-leaflet";
 import 'leaflet-rotatedmarker'; // Import the plugin
 
 import {useMapSetup} from "../util/MapSetup";
@@ -103,8 +103,9 @@ function MapComponent() {
                                            markerRefs.current.set(id, ref);
                                        }
                                    }}
-
-                    />;
+                    >
+                        <Tooltip> {id} </Tooltip>
+                    </Marker>;
                 })}
             </MapContainer>
 
