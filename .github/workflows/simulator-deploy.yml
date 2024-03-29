@@ -6,52 +6,47 @@ on:
       - main
     paths:
       - 'simulator/**'
-
 jobs:
-  deploy:
-    runs-on: ubuntu-22.04
+  build-and-deploy:
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up Go
-        uses: actions/setup-go@v2
+      - name: Build Docker image
+        run: |
+          cd api
+          docker build -t doroha-simulator .
+          cd ..
+          docker save doroha-simulator > doroha-simulator.tar
+
+      - name: Transfer Docker image to server
+        run:  |
+          # Write the SSH private key to a temporary file
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key
+          chmod 600 ssh_key
+          # Use the temporary file for SCP
+          scp -o StrictHostKeyChecking=no -i ssh_key doroha-simulator.tar ${{ secrets.USERNAME }}@165.22.233.166:~/
+          # Clean up the temporary key file
+          rm ssh_key
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
         with:
-          go-version: '1.20'
-
-      - name: Upgrade SSH
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y openssh-client
-
-      - name: Setup SSH
-        run: |
-          mkdir -p ~/.ssh/
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan 165.22.233.166 >> ~/.ssh/known_hosts    
-
-      - name: Install SSH Agent
-        run: |
-          eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_rsa   
-
-      - name: Stop Service
-        run: |
-          ssh  ${{ secrets.USERNAME }}@165.22.233.166 "pkill -f traffic-simulator"
-        continue-on-error: true
-
-      - name: Build and Deploy
-        run: |
-          # Navigate to the directory containing the Go code
-          cd cmd
-          go build -o traffic-simulator
-          # Make sure directory exists
-          ssh ${{ secrets.USERNAME }}@165.22.233.166 "mkdir -p ${{secrets.SIMULATOR_APP_DIRECTORY}} }}"
-          # Copy the new binary
-          scp -v -i ~/.ssh/id_rsa traffic-simulator ${{ secrets.USERNAME }}@165.22.233.166:${{ secrets.SIMULATOR_APP_DIRECTORY }}
-          # Copy the configuration file
-          scp -v -i ~/.ssh/id_rsa ../filtered_kyiv.geojson ${{ secrets.USERNAME }}@165.22.233.166:${{ secrets.SIMULATOR_APP_DIRECTORY }}
-          # Start the service on the remote server
-          ssh ${{ secrets.USERNAME }}@165.22.233.166 "cd ${{ secrets.SIMULATOR_APP_DIRECTORY }}; ENV=production ./traffic-simulator > /dev/null 2>&1 &"
-        working-directory: ./simulator
+          host: 165.22.233.166
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            mkdir -p ${{ secrets.SIMULATOR_APP_DIRECTORY }}
+            # Remove the existing .tar file, ignore error if it doesn't exist
+            rm -f ${{ secrets.SIMULATOR_APP_DIRECTORY }}/doroha-simulator.tar || true
+            # Move the new Docker image tar file
+            mv ~/doroha-simulator.tar ${{ secrets.SIMULATOR_APP_DIRECTORY }}
+            # Stop Running Container
+            docker ps -q --filter "publish=8080" | xargs -r docker stop
+            # Remove docker image
+            docker rmi -f doroha-simulator:latest || true
+            # Load docker image
+            docker load < ${{ secrets.SIMULATOR_APP_DIRECTORY }}/doroha-simulator.tar
+            # Run the new container
+            docker run -d -p 8080:8080 --network="host" -e ENV=production doroha-simulator > /dev/null 2>&1 &
