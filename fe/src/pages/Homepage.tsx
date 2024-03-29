@@ -63,10 +63,11 @@ function Homepage() {
                 <NavBarComponent/>
                 <div className= "flex">
                 <JourneyListContext.Provider value={journeyContextMemo}>
-                    <div className="p-1 w-5/6 h-full">
+                    <div className="p-1 w-5/6">
                         <MapComponent/>
                     </div>
-                    <div className= "p-1 w-1/6 h-full">
+                    <div className="p-1 w-1/6 overflow-y-auto"
+                         style={{maxHeight: 'calc(100vh - 4rem)'}}>
                         <ActiveJourneyList/>
                     </div>
                 </JourneyListContext.Provider>

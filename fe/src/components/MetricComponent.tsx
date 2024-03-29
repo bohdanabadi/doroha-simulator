@@ -40,7 +40,6 @@ function MetricComponent(metricName: string) {
             </div>
             <div className="flex justify-between items-center mt-2">
                 <div className="flex">
-                    {/* Toggle buttons */}
                     {['1h', '6h', '24h', '7d'].map((timeFrame) => (
                         <button
                             key={timeFrame}
