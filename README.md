@@ -16,17 +16,24 @@ The Doroha-Simulator is built using a variety of cutting-edge technologies:
 - **Containerization**: Docker for creating isolated environments
 
 ## Challenges Encountered & Learning Outcomes
-Throughout the development of the Doroha-Simulator, I encountered many challenges,
-particularly in understanding the extensive domain of maps
-and implementing algorithms for pathfinding and movement simulation.
-The project demanded a high level of organization and planning,
-from which I've learned the importance of pre-development work and the value of comprehensive understanding over trial and error.
-These experiences have greatly contributed to my growth as an engineer,
-enhancing both my technical skills and my approach to problem-solving.
+Throughout the project's development, I encountered numerous hurdles.
+These included facets of the software development cycle I hadn't delved into deeply before,
+like deployment, frontend development, and server setup, among others.
+I also immersed myself in domain-specific knowledge related to maps, such as pathfinding algorithms,
+extracting map data, and simulating movement on a map.
+Moreover,
+I honed skills in organization
+and familiarized myself with various tools and methodologies for planning and execution
+before the development phase began.
+These experiences have significantly enriched my engineering capabilities,
+improving both my technical prowess and my problem-solving strategies.
 
 ## Contact Information
 - **Email**: [bohdan.abadi@gmail.com](mailto:bohdan.abadi@gmail.com)
 - **LinkedIn**: [Bohdan Abadi](www.linkedin.com/in/bohdan-abadi)
+
+## Wiki
+### [Wiki guide](https://github.com/bohdanabadi/doroha-simulator/wiki)
 
 ## Live Website
 ### [Doroha-Simulator](https://www.journeys.bohdanabadi.com)
