@@ -17,7 +17,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          cd api
+          cd simulator
           docker build -t doroha-simulator .
           cd ..
           docker save doroha-simulator > doroha-simulator.tar
